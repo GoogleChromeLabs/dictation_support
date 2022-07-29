@@ -1,10 +1,14 @@
 # Dictation support
 
-TODO: add more details :)
-
 ## Install
 `npm install`
 
 ## Build
 `npm run build`
-Will create a `/dist/sdk.js` and a `/dist/index.html`. 
+Will create:
+* `/dist/sdk.js`
+* `/dist/index.d.ts`
+* `/dist/index.html`
+
+## Usage
+See `/dist/index.html` for a sample usage of the SDK.

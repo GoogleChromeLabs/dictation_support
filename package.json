@@ -8,9 +8,10 @@
   "author": "hendrich@google.com",
   "license": "Apache-2.0",
   "main": "dist/sdk.js",
-  "types": "dist/out-tsc/index.d.ts",
+  "types": "dist/index.d.ts",
   "files": [
-    "/dist/sdk.js"
+    "/dist/sdk.js",
+    "/dist/index.d.ts"
   ],
   "devDependencies": {
     "html-webpack-plugin": "^5.5.0",
