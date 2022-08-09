@@ -20,7 +20,7 @@
         function deviceToString(device) {
             return JSON.stringify({
                 'id': device.id,
-                'type': DeviceType[device.getDeviceType()],
+                'type': DictationSupport.DeviceType[device.getDeviceType()],
             });
         }
 
@@ -34,11 +34,11 @@
 
         function onButtonEvent(device, bitMask) {
             const events = new Set();
-            for (const value of Object.values(ButtonEvent)) {
+            for (const value of Object.values(DictationSupport.ButtonEvent)) {
                 const valueAsNumber = Number(value);
                 if (isNaN(valueAsNumber)) continue;
                 if (bitMask & valueAsNumber) {
-                    events.add(ButtonEvent[valueAsNumber]);
+                    events.add(DictationSupport.ButtonEvent[valueAsNumber]);
                 }
             }
 
@@ -46,7 +46,7 @@
         }
 
         function onMotionEvent(device, motionEvent) {
-            WriteLog(`onMotionEvent() \t device: ${deviceToString(device)} \t motionEvent: ${MotionEvent[motionEvent]}`);
+            WriteLog(`onMotionEvent() \t device: ${deviceToString(device)} \t motionEvent: ${DictationSupport.MotionEvent[motionEvent]}`);
         }
 
         function onDeviceConnected(device) {
@@ -59,7 +59,7 @@
         }
 
         async function init() {
-            deviceManager = new DictationDeviceManager();
+            deviceManager = new DictationSupport.DictationDeviceManager();
             deviceManager.addButtonEventListener(onButtonEvent);
             deviceManager.addDeviceConnectedEventListener(onDeviceConnected);
             deviceManager.addDeviceDisconnectedEventListener(onDeviceDisconnected);
