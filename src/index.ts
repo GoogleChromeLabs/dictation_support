@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {ButtonEvent as ButtonEvent_, DeviceType as DeviceType_, ImplementationType as ImplementationType_} from './dictation_device_base';
 import {DictationDeviceManager as DictationDeviceManager_} from './dictation_device_manager';
 import {FootControlDevice as FootControlDevice_} from './foot_control_device';
