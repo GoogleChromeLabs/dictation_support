@@ -20,7 +20,8 @@
         function deviceToString(device) {
             return JSON.stringify({
                 'id': device.id,
-                'type': DictationSupport.DeviceType[device.getDeviceType()],
+                'deviceCode': device.deviceCode,
+                //'type': DictationSupport.DeviceType[device.getDeviceType()],
             });
         }
 
