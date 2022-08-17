@@ -161,7 +161,6 @@ const SIMPLE_LED_STATES: Readonly<Record<SimpleLedState, Readonly<LedState>>> =
 export class SpeechMikeHidDevice extends DictationDeviceBase {
   readonly implType = ImplementationType.SPEECH_MIKE_HID;
 
-  protected isPremiumTouch = false;
   protected deviceCode = 0;
   protected ledState: LedState = { ...LED_STATE_OFF };
 
@@ -174,8 +173,6 @@ export class SpeechMikeHidDevice extends DictationDeviceBase {
 
   override async init() {
     await super.init();
-
-    await this.enableSpeechMikePremium();
     await this.fetchDeviceCode();
   }
 
@@ -284,11 +281,6 @@ export class SpeechMikeHidDevice extends DictationDeviceBase {
   async setEventMode(eventMode: EventMode) {
     const input = [0, 0, 0, 0, 0, 0, 0, eventMode];
     await this.sendCommand(Command.SET_EVENT_MODE, input);
-  }
-
-  protected async enableSpeechMikePremium() {
-    await this.sendCommandAndWaitForResponse(
-      Command.ENABLE_SPEECH_MIKE_PREMIUM);
   }
 
   protected async fetchDeviceCode() {
