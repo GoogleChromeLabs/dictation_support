@@ -17,9 +17,9 @@
 import {ButtonEvent as ButtonEvent_, DeviceType as DeviceType_, ImplementationType as ImplementationType_} from './dictation_device_base';
 import {DictationDeviceManager as DictationDeviceManager_} from './dictation_device_manager';
 import {FootControlDevice as FootControlDevice_} from './foot_control_device';
-import {LedStatePM3 as LedStatePM3_, PowerMic3Device as PowerMic3Device_} from './power_mic_3_device';
-import {SpeechMikeGamepadDevice as SpeechMikeGamepadDevice_} from './speech_mike_gamepad_device';
-import {EventMode as EventMode_, LedIndex as LedIndex_, LedMode as LedMode_, MotionEvent as MotionEvent_, SimpleLedState as SimpleLedState_} from './speech_mike_hid_device';
+import {LedStatePM3 as LedStatePM3_, PowerMic3Device as PowerMic3Device_} from './powermic_3_device';
+import {SpeechMikeGamepadDevice as SpeechMikeGamepadDevice_} from './speechmike_gamepad_device';
+import {EventMode as EventMode_, LedIndex as LedIndex_, LedMode as LedMode_, MotionEvent as MotionEvent_, SimpleLedState as SimpleLedState_} from './speechmike_hid_device';
 
 export namespace DictationSupport {
   // dictation_device_base.ts
@@ -33,14 +33,14 @@ export namespace DictationSupport {
   // foot_control_device.ts
   export const FootControlDevice = FootControlDevice_;
 
-  // power_mic_3_device.ts
+  // powermic_3_device.ts
   export const LedStatePM3 = LedStatePM3_;
   export const PowerMic3Device = PowerMic3Device_;
 
-  // speech_mike_gamepad_device.ts
+  // speechmike_gamepad_device.ts
   export const SpeechMikeGamepadDevice = SpeechMikeGamepadDevice_;
 
-  // speech_mike_hid_device.ts
+  // speechmike_hid_device.ts
   export const EventMode = EventMode_;
   export const SimpleLedState = SimpleLedState_;
   export const LedIndex = LedIndex_;

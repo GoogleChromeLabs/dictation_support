@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-import { DictationDevice } from './dictation_device';
-import { ButtonEvent, DeviceType, DictationDeviceBase, ImplementationType } from './dictation_device_base';
-import { SpeechMikeGamepadDevice } from './speech_mike_gamepad_device';
+import {DictationDevice} from './dictation_device';
+import {ButtonEvent, DeviceType, DictationDeviceBase, ImplementationType} from './dictation_device_base';
+import {SpeechMikeGamepadDevice} from './speechmike_gamepad_device';
 
 export enum EventMode {
   HID = 0,
@@ -64,13 +64,13 @@ export enum MotionEvent {
 }
 
 export type MotionEventListener =
-  (device: DictationDevice, event: MotionEvent) => void | Promise<void>;
+    (device: DictationDevice, event: MotionEvent) => void|Promise<void>;
 
 enum Command {
   SET_LED = 0x02,
   SET_EVENT_MODE = 0x0d,
   BUTTON_PRESS_EVENT = 0x80,
-  ENABLE_SPEECH_MIKE_PREMIUM = 0x83,
+  ENABLE_SPEECHMIKE_PREMIUM = 0x83,
   GET_DEVICE_CODE = 0x8b,
   GET_DEVICE_CODE_SO = 0x96,
   GET_EVENT_MODE = 0x8d,
@@ -80,7 +80,7 @@ enum Command {
 
 const COMMAND_TIMEOUT_MS = 5000;
 
-const BUTTON_MAPPINGS_SPEECH_MIKE = new Map<ButtonEvent, number>([
+const BUTTON_MAPPINGS_SPEECHMIKE = new Map<ButtonEvent, number>([
   [ButtonEvent.REWIND, 1 << 12],
   [ButtonEvent.PLAY, 1 << 10],
   [ButtonEvent.FORWARD, 1 << 11],
@@ -98,7 +98,7 @@ const BUTTON_MAPPINGS_SPEECH_MIKE = new Map<ButtonEvent, number>([
   [ButtonEvent.SCAN_SUCCESS, 1 << 7],
 ]);
 
-const BUTTON_MAPPINGS_POWER_MIC_4 = new Map<ButtonEvent, number>([
+const BUTTON_MAPPINGS_POWERMIC_4 = new Map<ButtonEvent, number>([
   [ButtonEvent.TAB_BACKWARD, 1 << 12],
   [ButtonEvent.PLAY, 1 << 10],
   [ButtonEvent.TAB_FORWARD, 1 << 11],
@@ -149,27 +149,27 @@ const LED_STATE_RECORD_STANDBY_OVERWRITE: Readonly<LedState> = Object.freeze({
 });
 
 const SIMPLE_LED_STATES: Readonly<Record<SimpleLedState, Readonly<LedState>>> =
-  Object.freeze({
-    [SimpleLedState.OFF]: LED_STATE_OFF,
-    [SimpleLedState.RECORD_INSERT]: LED_STATE_RECORD_INSERT,
-    [SimpleLedState.RECORD_OVERWRITE]: LED_STATE_RECORD_OVERWRITE,
-    [SimpleLedState.RECORD_STANDBY_INSERT]: LED_STATE_RECORD_STANDBY_INSERT,
-    [SimpleLedState.RECORD_STANDBY_OVERWRITE]:
-      LED_STATE_RECORD_STANDBY_OVERWRITE,
-  });
+    Object.freeze({
+      [SimpleLedState.OFF]: LED_STATE_OFF,
+      [SimpleLedState.RECORD_INSERT]: LED_STATE_RECORD_INSERT,
+      [SimpleLedState.RECORD_OVERWRITE]: LED_STATE_RECORD_OVERWRITE,
+      [SimpleLedState.RECORD_STANDBY_INSERT]: LED_STATE_RECORD_STANDBY_INSERT,
+      [SimpleLedState.RECORD_STANDBY_OVERWRITE]:
+          LED_STATE_RECORD_STANDBY_OVERWRITE,
+    });
 
 export class SpeechMikeHidDevice extends DictationDeviceBase {
-  readonly implType = ImplementationType.SPEECH_MIKE_HID;
+  readonly implType = ImplementationType.SPEECHMIKE_HID;
 
   protected deviceCode = 0;
-  protected ledState: LedState = { ...LED_STATE_OFF };
+  protected ledState: LedState = {...LED_STATE_OFF};
 
   protected commandResolvers = new Map<Command, (data: DataView) => void>();
   protected commandTimeouts = new Map<Command, number>();
 
   protected readonly motionEventListeners = new Set<MotionEventListener>();
 
-  protected proxyDevice: SpeechMikeGamepadDevice | undefined = undefined;
+  protected proxyDevice: SpeechMikeGamepadDevice|undefined = undefined;
 
   override async init() {
     await super.init();
@@ -195,30 +195,17 @@ export class SpeechMikeHidDevice extends DictationDeviceBase {
   getDeviceType(): DeviceType {
     if (this.hidDevice.vendorId === 0x0554) {
       if (this.hidDevice.productId === 0x0064) {
-        return DeviceType.POWER_MIC_4;
+        return DeviceType.POWERMIC_4;
       }
       return DeviceType.UNKNOWN;
     } else if (this.hidDevice.vendorId === 0x0911) {
-      if (this.deviceCode >= 3500 && this.deviceCode <= 3599) {
-        return DeviceType.SPEECH_MIKE_LFH_35XX;
-      } else if (this.deviceCode >= 3600 && this.deviceCode <= 3699) {
-        return DeviceType.SPEECH_MIKE_LFH_36XX;
-      } else if (this.deviceCode >= 3700 && this.deviceCode <= 3799) {
-        return DeviceType.SPEECH_MIKE_SMP_37XX;
-      } else if (this.deviceCode >= 3800 && this.deviceCode <= 3899) {
-        return DeviceType.SPEECH_MIKE_SMP_38XX;
-      } else if (this.deviceCode >= 4000 && this.deviceCode <= 4099) {
-        return DeviceType.SPEECH_MIKE_SMP_40XX;
-      } else if (this.deviceCode >= 6000 && this.deviceCode <= 6099) {
-        return DeviceType.SPEECH_ONE_PSM_6000;
-      }
-      return DeviceType.UNKNOWN;
+      return this.deviceCode;
     }
     return DeviceType.UNKNOWN;
   }
 
   async setSimpleLedState(simpleLedState: SimpleLedState) {
-    this.ledState = { ...SIMPLE_LED_STATES[simpleLedState] };
+    this.ledState = {...SIMPLE_LED_STATES[simpleLedState]};
     await this.sendLedState();
   }
 
@@ -249,18 +236,18 @@ export class SpeechMikeHidDevice extends DictationDeviceBase {
   assignProxyDevice(proxyDevice: SpeechMikeGamepadDevice) {
     if (this.proxyDevice !== undefined) {
       throw new Error(
-        'Proxy device already assigned. Adding multiple SpeechMikes in Browser/Gamepad mode at the same time is not supported.');
+          'Proxy device already assigned. Adding multiple SpeechMikes in Browser/Gamepad mode at the same time is not supported.');
     }
     this.proxyDevice = proxyDevice;
     this.proxyDevice.addButtonEventListener(
-      (_device: DictationDevice, bitMask: number) =>
-        this.onProxyButtonEvent(bitMask));
+        (_device: DictationDevice, bitMask: number) =>
+            this.onProxyButtonEvent(bitMask));
   }
 
   // See comment in DictationDeviceManager
   protected async onProxyButtonEvent(bitMask: number) {
     await Promise.all([...this.buttonEventListeners].map(
-      listener => listener(this.getThisAsDictationDevice(), bitMask)));
+        listener => listener(this.getThisAsDictationDevice(), bitMask)));
   }
 
   protected async handleCommandResponse(command: Command, data: DataView) {
@@ -273,7 +260,7 @@ export class SpeechMikeHidDevice extends DictationDeviceBase {
 
   async getEventMode(): Promise<EventMode> {
     const response =
-      await this.sendCommandAndWaitForResponse(Command.GET_EVENT_MODE);
+        await this.sendCommandAndWaitForResponse(Command.GET_EVENT_MODE);
     const eventMode = response.getInt8(8);
     return eventMode;
   }
@@ -285,10 +272,11 @@ export class SpeechMikeHidDevice extends DictationDeviceBase {
 
   protected async fetchDeviceCode() {
     const response =
-      await this.sendCommandAndWaitForResponse(Command.GET_DEVICE_CODE);
+        await this.sendCommandAndWaitForResponse(Command.GET_DEVICE_CODE);
 
     if (response.getUint8(1)) {
-      const response = await this.sendCommandAndWaitForResponse(Command.GET_DEVICE_CODE_SO);
+      const response =
+          await this.sendCommandAndWaitForResponse(Command.GET_DEVICE_CODE_SO);
       this.deviceCode = response.getUint16(7);
       return;
     }
@@ -320,10 +308,10 @@ export class SpeechMikeHidDevice extends DictationDeviceBase {
 
   protected getButtonMappings(): Map<ButtonEvent, number> {
     if (this.hidDevice.vendorId === 0x0554 &&
-      this.hidDevice.productId === 0x0064) {
-      return BUTTON_MAPPINGS_POWER_MIC_4;
+        this.hidDevice.productId === 0x0064) {
+      return BUTTON_MAPPINGS_POWERMIC_4;
     }
-    return BUTTON_MAPPINGS_SPEECH_MIKE;
+    return BUTTON_MAPPINGS_SPEECHMIKE;
   }
 
   protected getInputBitmask(data: DataView): number {
@@ -337,22 +325,22 @@ export class SpeechMikeHidDevice extends DictationDeviceBase {
   protected async handleMotionEvent(data: DataView) {
     const inputBitMask = data.getUint8(8);
     const motionEvent =
-      inputBitMask === 1 ? MotionEvent.LAYED_DOWN : MotionEvent.PICKED_UP;
+        inputBitMask === 1 ? MotionEvent.LAYED_DOWN : MotionEvent.PICKED_UP;
 
     await Promise.all([...this.motionEventListeners].map(
-      listener => listener(this.getThisAsDictationDevice(), motionEvent)));
+        listener => listener(this.getThisAsDictationDevice(), motionEvent)));
   }
 
   protected async sendCommand(command: Command, input?: number[]) {
     const data = input === undefined ? new Uint8Array([command]) :
-      new Uint8Array([command, ...input]);
+                                       new Uint8Array([command, ...input]);
     await this.hidDevice.sendReport(/* reportId= */ 0, data);
   }
 
   protected async sendCommandAndWaitForResponse(
-    command: Command, input?: number[]): Promise<DataView> {
+      command: Command, input?: number[]): Promise<DataView> {
     if (this.commandResolvers.has(command) ||
-      this.commandTimeouts.has(command)) {
+        this.commandTimeouts.has(command)) {
       throw new Error(`Command ${command} is already running`);
     }
 
@@ -374,7 +362,7 @@ export class SpeechMikeHidDevice extends DictationDeviceBase {
 
     if (result === undefined) {
       throw new Error(
-        `Command ${command} timed out after ${COMMAND_TIMEOUT_MS}ms`);
+          `Command ${command} timed out after ${COMMAND_TIMEOUT_MS}ms`);
     }
 
     return result;

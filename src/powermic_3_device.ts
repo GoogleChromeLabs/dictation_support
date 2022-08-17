@@ -37,10 +37,10 @@ const BUTTON_MAPPINGS = new Map<ButtonEvent, number>([
 ]);
 
 export class PowerMic3Device extends DictationDeviceBase {
-  readonly implType = ImplementationType.POWER_MIC_3;
+  readonly implType = ImplementationType.POWERMIC_3;
 
   getDeviceType(): DeviceType {
-    return DeviceType.POWER_MIC_3;
+    return DeviceType.POWERMIC_3;
   }
 
   async setLed(state: LedStatePM3) {

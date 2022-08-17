@@ -17,7 +17,7 @@
 
 import {ButtonEvent, DeviceType, DictationDeviceBase, ImplementationType} from './dictation_device_base';
 
-const BUTTON_MAPPINGS_SPEECH_MIKE = new Map<ButtonEvent, number>([
+const BUTTON_MAPPINGS_SPEECHMIKE = new Map<ButtonEvent, number>([
   [ButtonEvent.REWIND, 1 << 0],
   [ButtonEvent.PLAY, 1 << 1],
   [ButtonEvent.FORWARD, 1 << 2],
@@ -32,7 +32,7 @@ const BUTTON_MAPPINGS_SPEECH_MIKE = new Map<ButtonEvent, number>([
   [ButtonEvent.EOL_PRIO, 1 << 14],
 ]);
 
-const BUTTON_MAPPINGS_POWER_MIC_4 = new Map<ButtonEvent, number>([
+const BUTTON_MAPPINGS_POWERMIC_4 = new Map<ButtonEvent, number>([
   [ButtonEvent.TAB_BACKWARD, 1 << 0],
   [ButtonEvent.PLAY, 1 << 1],
   [ButtonEvent.TAB_FORWARD, 1 << 2],
@@ -48,7 +48,7 @@ const BUTTON_MAPPINGS_POWER_MIC_4 = new Map<ButtonEvent, number>([
 ]);
 
 export class SpeechMikeGamepadDevice extends DictationDeviceBase {
-  readonly implType = ImplementationType.SPEECH_MIKE_GAMEPAD;
+  readonly implType = ImplementationType.SPEECHMIKE_GAMEPAD;
 
   getDeviceType(): DeviceType {
     // All SpeechMikes have the same productId (except PowerMic IV) and the lfh
@@ -61,9 +61,9 @@ export class SpeechMikeGamepadDevice extends DictationDeviceBase {
   protected getButtonMappings(): Map<ButtonEvent, number> {
     if (this.hidDevice.vendorId === 0x0554 &&
         this.hidDevice.productId === 0x0064) {
-      return BUTTON_MAPPINGS_POWER_MIC_4;
+      return BUTTON_MAPPINGS_POWERMIC_4;
     }
-    return BUTTON_MAPPINGS_SPEECH_MIKE;
+    return BUTTON_MAPPINGS_SPEECHMIKE;
   }
 
   protected getInputBitmask(data: DataView): number {

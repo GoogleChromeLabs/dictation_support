@@ -18,16 +18,16 @@
 import {DictationDevice} from './dictation_device';
 import {ButtonEventListener, ImplementationType} from './dictation_device_base';
 import {FootControlDevice} from './foot_control_device';
-import {PowerMic3Device} from './power_mic_3_device';
-import {SpeechMikeGamepadDevice} from './speech_mike_gamepad_device';
-import {MotionEventListener, SpeechMikeHidDevice} from './speech_mike_hid_device';
+import {PowerMic3Device} from './powermic_3_device';
+import {SpeechMikeGamepadDevice} from './speechmike_gamepad_device';
+import {MotionEventListener, SpeechMikeHidDevice} from './speechmike_hid_device';
 
 type DeviceEventListener = (device: DictationDevice) => void|Promise<void>;
 
 const DEVICE_FILTERS: Readonly<
     Record<ImplementationType, ReadonlyArray<HIDDeviceFilter>>> =
     Object.freeze({
-      [ImplementationType.SPEECH_MIKE_HID]: Object.freeze([
+      [ImplementationType.SPEECHMIKE_HID]: Object.freeze([
         // Wired SpeechMikes (LFH35xx, LFH36xx, SMP37xx, SMP38xx) in HID mode
         Object.freeze(
             {vendorId: 0x0911, productId: 0x0c1c, usagePage: 65440, usage: 1}),
@@ -44,7 +44,7 @@ const DEVICE_FILTERS: Readonly<
         Object.freeze(
             {vendorId: 0x0554, productId: 0x0064, usagePage: 65440, usage: 1}),
       ]),
-      [ImplementationType.SPEECH_MIKE_GAMEPAD]: Object.freeze([
+      [ImplementationType.SPEECHMIKE_GAMEPAD]: Object.freeze([
         // All SpeechMikes in Browser/Gamepad mode
         Object.freeze(
             {vendorId: 0x0911, productId: 0x0fa0, usagePage: 1, usage: 4}),
@@ -63,7 +63,7 @@ const DEVICE_FILTERS: Readonly<
         Object.freeze(
             {vendorId: 0x0911, productId: 0x091a, usagePage: 1, usage: 4}),
       ]),
-      [ImplementationType.POWER_MIC_3]: Object.freeze([
+      [ImplementationType.POWERMIC_3]: Object.freeze([
         // PowerMic III
         Object.freeze(
             {vendorId: 0x0554, productId: 0x1001, usagePage: 1, usage: 0}),
@@ -137,7 +137,7 @@ export class DictationDeviceManager {
     const hostDevices: DictationDevice[] = [];
     for (const device of filteredDevices) {
       if (device === undefined) continue;
-      if (device.implType === ImplementationType.SPEECH_MIKE_GAMEPAD) {
+      if (device.implType === ImplementationType.SPEECHMIKE_GAMEPAD) {
         proxyDevices.push(device);
       } else {
         hostDevices.push(device);
@@ -157,7 +157,7 @@ export class DictationDeviceManager {
       const proxyHidDevice = proxyDevice.hidDevice;
       let assigned = false;
       for (const hostDevice of this.devices.values()) {
-        if (hostDevice.implType !== ImplementationType.SPEECH_MIKE_HID) {
+        if (hostDevice.implType !== ImplementationType.SPEECHMIKE_HID) {
           continue;
         }
         const hostHidDevice = hostDevice.hidDevice;
@@ -182,11 +182,11 @@ export class DictationDeviceManager {
     const implType = getImplType(hidDevice);
     if (implType === undefined) return undefined;
     switch (implType) {
-      case ImplementationType.SPEECH_MIKE_HID:
+      case ImplementationType.SPEECHMIKE_HID:
         return new SpeechMikeHidDevice(hidDevice);
-      case ImplementationType.POWER_MIC_3:
+      case ImplementationType.POWERMIC_3:
         return new PowerMic3Device(hidDevice);
-      case ImplementationType.SPEECH_MIKE_GAMEPAD:
+      case ImplementationType.SPEECHMIKE_GAMEPAD:
         return new SpeechMikeGamepadDevice(hidDevice);
       case ImplementationType.FOOT_CONTROL:
         return new FootControlDevice(hidDevice);
@@ -200,7 +200,7 @@ export class DictationDeviceManager {
       device.addButtonEventListener(listener);
     }
 
-    if (device.implType === ImplementationType.SPEECH_MIKE_HID) {
+    if (device.implType === ImplementationType.SPEECHMIKE_HID) {
       for (const listener of this.motionEventListeners) {
         device.addMotionEventListener(listener);
       }
