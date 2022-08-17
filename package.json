@@ -4,7 +4,7 @@
   "description": "SDK to interact with dictation devices",
   "scripts": {
     "build": "npx webpack --config=webpack.config.js",
-    "precommit": "check-clang-format"
+    "check-formatting": "check-clang-format"
   },
   "author": "hendrich@google.com",
   "license": "Apache-2.0",
@@ -15,7 +15,7 @@
     "/dist/index.d.ts"
   ],
   "pre-commit": [
-    "precommit"
+    "check-formatting"
   ],
   "devDependencies": {
     "clang-format": "^1.8.0",
