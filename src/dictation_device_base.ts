@@ -65,8 +65,8 @@ export enum ButtonEvent {
   CUSTOM_LEFT = 1 << 18,
   CUSTOM_RIGHT = 1 << 19,
   ENTER_SELECT = 1 << 20,
-  SCAN_END = 1<<21,
-  SCAN_SUCCESS = 1<<22,
+  SCAN_END = 1 << 21,
+  SCAN_SUCCESS = 1 << 22,
 }
 
 export type ButtonEventListener = (device: DictationDevice, bitMask: number) =>

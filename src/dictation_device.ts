@@ -20,5 +20,5 @@ import {PowerMic3Device} from './powermic_3_device';
 import {SpeechMikeGamepadDevice} from './speechmike_gamepad_device';
 import {SpeechMikeHidDevice} from './speechmike_hid_device';
 
-export type DictationDevice = SpeechMikeHidDevice|
-    SpeechMikeGamepadDevice|PowerMic3Device|FootControlDevice;
+export type DictationDevice = SpeechMikeHidDevice|SpeechMikeGamepadDevice|
+    PowerMic3Device|FootControlDevice;

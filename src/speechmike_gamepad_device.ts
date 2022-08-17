@@ -67,7 +67,7 @@ export class SpeechMikeGamepadDevice extends DictationDeviceBase {
   }
 
   protected getInputBitmask(data: DataView): number {
-    return data.getUint16(0, /* littleEndian= */ true); 
+    return data.getUint16(0, /* littleEndian= */ true);
   }
 
   protected getThisAsDictationDevice(): SpeechMikeGamepadDevice {
