@@ -97,7 +97,7 @@
         async function getEventMode() {
             const device = getDeviceWithSelectedId();
             const eventMode = await device.getEventMode();
-            WriteLog(`getEventMode() \t device: ${deviceToString(device)}} \t eventMode: ${EventMode[eventMode]}`);
+            WriteLog(`getEventMode() \t device: ${deviceToString(device)}} \t eventMode: ${DictationSupport.EventMode[eventMode]}`);
         }
 
         async function setEventMode() {
