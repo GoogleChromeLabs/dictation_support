@@ -15,7 +15,12 @@
  * limitations under the License.
  */
 
-import {ButtonEvent, DeviceType, DictationDeviceBase, ImplementationType} from './dictation_device_base';
+import {
+  ButtonEvent,
+  DeviceType,
+  DictationDeviceBase,
+  ImplementationType,
+} from './dictation_device_base';
 
 const BUTTON_MAPPINGS = new Map<ButtonEvent, number>([
   [ButtonEvent.REWIND, 1 << 0],
@@ -32,7 +37,7 @@ export class FootControlDevice extends DictationDeviceBase {
       if (this.hidDevice.productId === 0x1844) {
         return DeviceType.FOOT_CONTROL_ACC_2310_2320;
       } else if (this.hidDevice.productId === 0x091a) {
-        return DeviceType.FOOT_CONTROL_ACC_2330
+        return DeviceType.FOOT_CONTROL_ACC_2330;
       }
       return DeviceType.UNKNOWN;
     }
