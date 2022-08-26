@@ -14,25 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {
-  ButtonEvent as ButtonEvent_,
-  DeviceType as DeviceType_,
-  ImplementationType as ImplementationType_,
-} from './dictation_device_base';
+import {ButtonEvent as ButtonEvent_, DeviceType as DeviceType_, ImplementationType as ImplementationType_,} from './dictation_device_base';
 import {DictationDeviceManager as DictationDeviceManager_} from './dictation_device_manager';
 import {FootControlDevice as FootControlDevice_} from './foot_control_device';
-import {
-  LedStatePM3 as LedStatePM3_,
-  PowerMic3Device as PowerMic3Device_,
-} from './powermic_3_device';
+import {LedStatePM3 as LedStatePM3_, PowerMic3Device as PowerMic3Device_,} from './powermic_3_device';
 import {SpeechMikeGamepadDevice as SpeechMikeGamepadDevice_} from './speechmike_gamepad_device';
-import {
-  EventMode as EventMode_,
-  LedIndex as LedIndex_,
-  LedMode as LedMode_,
-  MotionEvent as MotionEvent_,
-  SimpleLedState as SimpleLedState_,
-} from './speechmike_hid_device';
+import {EventMode as EventMode_, LedIndex as LedIndex_, LedMode as LedMode_, MotionEvent as MotionEvent_, SimpleLedState as SimpleLedState_,} from './speechmike_hid_device';
 
 export namespace DictationSupport {
   // dictation_device_base.ts

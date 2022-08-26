@@ -15,12 +15,7 @@
  * limitations under the License.
  */
 
-import {
-  ButtonEvent,
-  DeviceType,
-  DictationDeviceBase,
-  ImplementationType,
-} from './dictation_device_base';
+import {ButtonEvent, DeviceType, DictationDeviceBase, ImplementationType,} from './dictation_device_base';
 
 const BUTTON_MAPPINGS_SPEECHMIKE = new Map<ButtonEvent, number>([
   [ButtonEvent.REWIND, 1 << 0],
@@ -64,10 +59,8 @@ export class SpeechMikeGamepadDevice extends DictationDeviceBase {
   }
 
   protected getButtonMappings(): Map<ButtonEvent, number> {
-    if (
-      this.hidDevice.vendorId === 0x0554 &&
-      this.hidDevice.productId === 0x0064
-    ) {
+    if (this.hidDevice.vendorId === 0x0554 &&
+        this.hidDevice.productId === 0x0064) {
       return BUTTON_MAPPINGS_POWERMIC_4;
     }
     return BUTTON_MAPPINGS_SPEECHMIKE;
