@@ -146,7 +146,7 @@ export class DictationDeviceManager {
 
   async shutdown() {
     await Promise.all([
-      [...this.devices.values()].map((device) =>
+      [...this.devices.values()].map(device =>
         device.shutdown(/*closeDevice=*/ true)
       ),
     ]);
@@ -181,7 +181,7 @@ export class DictationDeviceManager {
     hidDevices: HIDDevice[]
   ): Promise<Array<DictationDevice>> {
     const devices = await Promise.all(
-      hidDevices.map((hidDevice) => this.createDevice(hidDevice))
+      hidDevices.map(hidDevice => this.createDevice(hidDevice))
     );
 
     const filteredDevices = devices.filter(isDevice);
@@ -203,7 +203,7 @@ export class DictationDeviceManager {
       this.devices.set(device.hidDevice, device);
     }
 
-    await Promise.all(filteredDevices.map((device) => device.init()));
+    await Promise.all(filteredDevices.map(device => device.init()));
 
     if (proxyDevices.length === 0) return hostDevices;
     for (const proxyDevice of proxyDevices) {
@@ -271,7 +271,7 @@ export class DictationDeviceManager {
     if (device === undefined) return;
 
     await Promise.all(
-      [...this.deviceConnectEventListeners].map((listener) => listener(device))
+      [...this.deviceConnectEventListeners].map(listener => listener(device))
     );
   }
 
@@ -283,9 +283,7 @@ export class DictationDeviceManager {
     await device.shutdown(/*closeDevice=*/ false);
 
     await Promise.all(
-      [...this.deviceDisconnectEventListeners].map((listener) =>
-        listener(device)
-      )
+      [...this.deviceDisconnectEventListeners].map(listener => listener(device))
     );
 
     this.devices.delete(hidDevice);
@@ -315,7 +313,7 @@ function deviceMatchesFilters(
   hidDevice: HIDDevice,
   filters: ReadonlyArray<HIDDeviceFilter>
 ): boolean {
-  return filters.some((filter) => deviceMatchesFilter(hidDevice, filter));
+  return filters.some(filter => deviceMatchesFilter(hidDevice, filter));
 }
 
 function deviceMatchesFilter(
@@ -334,7 +332,7 @@ function deviceMatchesFilter(
     if (
       hidDevice.collections === undefined ||
       hidDevice.collections.every(
-        (collection) => collection.usagePage !== filter.usagePage
+        collection => collection.usagePage !== filter.usagePage
       )
     ) {
       return false;
@@ -345,7 +343,7 @@ function deviceMatchesFilter(
     if (
       hidDevice.collections === undefined ||
       hidDevice.collections.every(
-        (collection) => collection.usage !== filter.usage
+        collection => collection.usage !== filter.usage
       )
     ) {
       return false;
