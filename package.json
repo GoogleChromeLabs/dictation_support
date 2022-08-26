@@ -5,8 +5,8 @@
   "scripts": {
     "build": "npx webpack --config=webpack.config.js",
     "lint": "eslint --ignore-path .gitignore --ext .ts .",
-    "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
-    "formatCheck": "prettier --ignore-path .gitignore --check \"**/*.+(js|ts|json)\"",
+    "format": "git-clang-format",
+    "formatCheck": "check-clang-format \"'npm run format'\"",
     "prepare": "husky install"
   },
   "author": "hendrich@google.com",
@@ -20,6 +20,7 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.35.1",
     "@typescript-eslint/parser": "^5.35.1",
+    "clang-format": "^1.8.0",
     "eslint": "^8.22.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-standard-with-typescript": "^22.0.0",

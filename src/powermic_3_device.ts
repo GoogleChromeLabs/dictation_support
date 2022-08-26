@@ -15,12 +15,7 @@
  * limitations under the License.
  */
 
-import {
-  ButtonEvent,
-  DeviceType,
-  DictationDeviceBase,
-  ImplementationType,
-} from './dictation_device_base';
+import {ButtonEvent, DeviceType, DictationDeviceBase, ImplementationType,} from './dictation_device_base';
 
 export enum LedStatePM3 {
   OFF = 0,

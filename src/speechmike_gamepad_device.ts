@@ -15,12 +15,7 @@
  * limitations under the License.
  */
 
-import {
-  ButtonEvent,
-  DeviceType,
-  DictationDeviceBase,
-  ImplementationType,
-} from './dictation_device_base';
+import {ButtonEvent, DeviceType, DictationDeviceBase, ImplementationType,} from './dictation_device_base';
 
 const BUTTON_MAPPINGS_SPEECHMIKE = new Map<ButtonEvent, number>([
   [ButtonEvent.REWIND, 1 << 0],
