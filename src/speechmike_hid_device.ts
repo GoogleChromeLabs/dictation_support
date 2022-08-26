@@ -184,9 +184,8 @@ export class SpeechMikeHidDevice extends DictationDeviceBase {
     }
   }
 
-  addMotionEventListener(listener: MotionEventListener)
-  {
-    this.motionEventListeners.add(listener); 
+  addMotionEventListener(listener: MotionEventListener) {
+    this.motionEventListeners.add(listener);
   }
 
   getDeviceCode(): number {
