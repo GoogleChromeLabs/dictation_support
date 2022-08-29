@@ -9,13 +9,20 @@
 <body>
 
     <script>
-        let deviceManager;
+        let deviceManager = null;
 
         function WriteLog(message) {
             log = document.getElementById("log");
             log.value = `${log.value}${new Date().toLocaleTimeString()}: ${message}\n`;
             log.scrollTop = log.scrollHeight;
         }
+
+        window.onerror = (error) => {
+            WriteLog(`onError() \t ${error}`);
+        };
+        window.addEventListener("unhandledrejection", (promiseRejectionEvent) => {
+            WriteLog(`onError() \t ${promiseRejectionEvent.reason}`);
+        });
 
         function deviceToString(device) {
             return JSON.stringify({
@@ -59,14 +66,21 @@
         }
 
         async function init() {
-            deviceManager = new DictationSupport.DictationDeviceManager();
-            deviceManager.addButtonEventListener(onButtonEvent);
-            deviceManager.addDeviceConnectedEventListener(onDeviceConnected);
-            deviceManager.addDeviceDisconnectedEventListener(onDeviceDisconnected);
-            deviceManager.addMotionEventListener(onMotionEvent);
+            if (deviceManager === null) {
+                deviceManager = new DictationSupport.DictationDeviceManager();
+                deviceManager.addButtonEventListener(onButtonEvent);
+                deviceManager.addDeviceConnectedEventListener(onDeviceConnected);
+                deviceManager.addDeviceDisconnectedEventListener(onDeviceDisconnected);
+                deviceManager.addMotionEventListener(onMotionEvent);
+            }
             await deviceManager.init();
             WriteLog('init() done');
             getDevices();
+        }
+
+        async function shutdown() {
+            await deviceManager.shutdown();
+            WriteLog('shutdown() done');
         }
 
         async function requestDevice() {
@@ -80,6 +94,9 @@
         function getDevices() {
             const devices = deviceManager.getDevices();
             WriteLog(`getDevices() devices: ${devicesToString(devices)}`);
+            if (devices.length > 0) {
+                setDeviceIdInUi(devices[0]);
+            }
         }
 
         function getDeviceWithSelectedId() {
@@ -132,6 +149,7 @@
 
     <p>
         <button onclick="init()">init</button>
+        <button onclick="shutdown()">shutdown</button>
     </p>
     <p>
         <button onclick="requestDevice()">requestDevice</button>

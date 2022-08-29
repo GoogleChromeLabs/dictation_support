@@ -81,12 +81,13 @@ export abstract class DictationDeviceBase {
   protected readonly buttonEventListeners = new Set<ButtonEventListener>();
   protected lastBitMask = 0;
 
+  protected readonly onInputReportHandler = (event: HIDInputReportEvent) =>
+      this.onInputReport(event);
+
   constructor(readonly hidDevice: HIDDevice) {}
 
   async init() {
-    this.hidDevice.addEventListener(
-        'inputreport',
-        (event: HIDInputReportEvent) => this.onInputReport(event));
+    this.hidDevice.addEventListener('inputreport', this.onInputReportHandler);
 
     if (this.hidDevice.opened === false) {
       await this.hidDevice.open();
@@ -94,6 +95,9 @@ export abstract class DictationDeviceBase {
   }
 
   async shutdown(closeDevice = true) {
+    this.hidDevice.removeEventListener(
+        'inputreport', this.onInputReportHandler);
+
     if (closeDevice) {
       await this.hidDevice.close();
     }

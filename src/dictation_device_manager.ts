@@ -80,31 +80,50 @@ export class DictationDeviceManager {
 
   protected readonly devices = new Map<HIDDevice, DictationDevice>();
 
+  protected readonly onConnectHandler = (event: HIDConnectionEvent) =>
+      this.onHidDeviceConnected(event);
+  protected readonly onDisconectHandler = (event: HIDConnectionEvent) =>
+      this.onHidDeviceDisconnected(event);
+
+  protected isInitialized = false;
+
   getDevices(): DictationDevice[] {
+    this.failIfNotInitialized();
     return [...this.devices.values()];
   }
 
   async init() {
-    navigator.hid.addEventListener(
-        'connect',
-        (event: HIDConnectionEvent) => this.onHidDeviceConnected(event));
-    navigator.hid.addEventListener(
-        'disconnect',
-        (event: HIDConnectionEvent) => this.onHidDeviceDisconnected(event));
+    if (this.isInitialized) {
+      throw new Error('DictationDeviceManager already initialized');
+    }
+
+    navigator.hid.addEventListener('connect', this.onConnectHandler);
+    navigator.hid.addEventListener('disconnect', this.onDisconectHandler);
 
     const hidDevices = await navigator.hid.getDevices();
     await this.createAndAddInitializedDevices(hidDevices);
+
+    this.isInitialized = true;
   }
 
   async shutdown() {
+    this.failIfNotInitialized();
+
+    navigator.hid.removeEventListener('connect', this.onConnectHandler);
+    navigator.hid.removeEventListener('disconnect', this.onDisconectHandler);
+
     await Promise.all([
       [...this.devices.values()].map(
           device => device.shutdown(/*closeDevice=*/ true)),
     ]);
     this.devices.clear();
+
+    this.isInitialized = false;
   }
 
   async requestDevice(): Promise<Array<DictationDevice>> {
+    this.failIfNotInitialized();
+
     const hidDevices = await navigator.hid.requestDevice({
       filters: getFilters(),
     });
@@ -126,6 +145,12 @@ export class DictationDeviceManager {
 
   addMotionEventListener(listener: MotionEventListener) {
     this.motionEventListeners.add(listener);
+  }
+
+  protected failIfNotInitialized() {
+    if (!this.isInitialized) {
+      throw new Error('DictationDeviceManager not yet initialized');
+    }
   }
 
   protected async createAndAddInitializedDevices(hidDevices: HIDDevice[]):
