@@ -69,10 +69,8 @@ export enum ButtonEvent {
   SCAN_SUCCESS = 1 << 22,
 }
 
-export type ButtonEventListener = (
-  device: DictationDevice,
-  bitMask: number
-) => void | Promise<void>;
+export type ButtonEventListener = (device: DictationDevice, bitMask: number) =>
+    void|Promise<void>;
 
 export abstract class DictationDeviceBase {
   private static next_id = 0;
@@ -87,9 +85,8 @@ export abstract class DictationDeviceBase {
 
   async init() {
     this.hidDevice.addEventListener(
-      'inputreport',
-      (event: HIDInputReportEvent) => this.onInputReport(event)
-    );
+        'inputreport',
+        (event: HIDInputReportEvent) => this.onInputReport(event));
 
     if (this.hidDevice.opened === false) {
       await this.hidDevice.open();
@@ -124,11 +121,8 @@ export abstract class DictationDeviceBase {
     if (outputBitMask === this.lastBitMask) return;
     this.lastBitMask = outputBitMask;
 
-    await Promise.all(
-      [...this.buttonEventListeners].map(listener =>
-        listener(this.getThisAsDictationDevice(), outputBitMask)
-      )
-    );
+    await Promise.all([...this.buttonEventListeners].map(
+        listener => listener(this.getThisAsDictationDevice(), outputBitMask)));
   }
 
   abstract getDeviceType(): DeviceType;

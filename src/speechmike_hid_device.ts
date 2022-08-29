@@ -16,12 +16,7 @@
  */
 
 import {DictationDevice} from './dictation_device';
-import {
-  ButtonEvent,
-  DeviceType,
-  DictationDeviceBase,
-  ImplementationType,
-} from './dictation_device_base';
+import {ButtonEvent, DeviceType, DictationDeviceBase, ImplementationType,} from './dictation_device_base';
 import {SpeechMikeGamepadDevice} from './speechmike_gamepad_device';
 
 export enum EventMode {
@@ -68,10 +63,8 @@ export enum MotionEvent {
   LAYED_DOWN = 1,
 }
 
-export type MotionEventListener = (
-  device: DictationDevice,
-  event: MotionEvent
-) => void | Promise<void>;
+export type MotionEventListener =
+    (device: DictationDevice, event: MotionEvent) => void|Promise<void>;
 
 enum Command {
   SET_LED = 0x02,
@@ -156,14 +149,14 @@ const LED_STATE_RECORD_STANDBY_OVERWRITE: Readonly<LedState> = Object.freeze({
 });
 
 const SIMPLE_LED_STATES: Readonly<Record<SimpleLedState, Readonly<LedState>>> =
-  Object.freeze({
-    [SimpleLedState.OFF]: LED_STATE_OFF,
-    [SimpleLedState.RECORD_INSERT]: LED_STATE_RECORD_INSERT,
-    [SimpleLedState.RECORD_OVERWRITE]: LED_STATE_RECORD_OVERWRITE,
-    [SimpleLedState.RECORD_STANDBY_INSERT]: LED_STATE_RECORD_STANDBY_INSERT,
-    [SimpleLedState.RECORD_STANDBY_OVERWRITE]:
-      LED_STATE_RECORD_STANDBY_OVERWRITE,
-  });
+    Object.freeze({
+      [SimpleLedState.OFF]: LED_STATE_OFF,
+      [SimpleLedState.RECORD_INSERT]: LED_STATE_RECORD_INSERT,
+      [SimpleLedState.RECORD_OVERWRITE]: LED_STATE_RECORD_OVERWRITE,
+      [SimpleLedState.RECORD_STANDBY_INSERT]: LED_STATE_RECORD_STANDBY_INSERT,
+      [SimpleLedState.RECORD_STANDBY_OVERWRITE]:
+          LED_STATE_RECORD_STANDBY_OVERWRITE,
+    });
 
 export class SpeechMikeHidDevice extends DictationDeviceBase {
   readonly implType = ImplementationType.SPEECHMIKE_HID;
@@ -176,7 +169,7 @@ export class SpeechMikeHidDevice extends DictationDeviceBase {
 
   protected readonly motionEventListeners = new Set<MotionEventListener>();
 
-  protected proxyDevice: SpeechMikeGamepadDevice | undefined = undefined;
+  protected proxyDevice: SpeechMikeGamepadDevice|undefined = undefined;
 
   override async init() {
     await super.init();
@@ -243,23 +236,18 @@ export class SpeechMikeHidDevice extends DictationDeviceBase {
   assignProxyDevice(proxyDevice: SpeechMikeGamepadDevice) {
     if (this.proxyDevice !== undefined) {
       throw new Error(
-        'Proxy device already assigned. Adding multiple SpeechMikes in Browser/Gamepad mode at the same time is not supported.'
-      );
+          'Proxy device already assigned. Adding multiple SpeechMikes in Browser/Gamepad mode at the same time is not supported.');
     }
     this.proxyDevice = proxyDevice;
     this.proxyDevice.addButtonEventListener(
-      (_device: DictationDevice, bitMask: number) =>
-        this.onProxyButtonEvent(bitMask)
-    );
+        (_device: DictationDevice, bitMask: number) =>
+            this.onProxyButtonEvent(bitMask));
   }
 
   // See comment in DictationDeviceManager
   protected async onProxyButtonEvent(bitMask: number) {
-    await Promise.all(
-      [...this.buttonEventListeners].map(listener =>
-        listener(this.getThisAsDictationDevice(), bitMask)
-      )
-    );
+    await Promise.all([...this.buttonEventListeners].map(
+        listener => listener(this.getThisAsDictationDevice(), bitMask)));
   }
 
   protected async handleCommandResponse(command: Command, data: DataView) {
@@ -271,9 +259,8 @@ export class SpeechMikeHidDevice extends DictationDeviceBase {
   }
 
   async getEventMode(): Promise<EventMode> {
-    const response = await this.sendCommandAndWaitForResponse(
-      Command.GET_EVENT_MODE
-    );
+    const response =
+        await this.sendCommandAndWaitForResponse(Command.GET_EVENT_MODE);
     const eventMode = response.getInt8(8);
     return eventMode;
   }
@@ -284,14 +271,12 @@ export class SpeechMikeHidDevice extends DictationDeviceBase {
   }
 
   protected async fetchDeviceCode() {
-    const response = await this.sendCommandAndWaitForResponse(
-      Command.GET_DEVICE_CODE
-    );
+    const response =
+        await this.sendCommandAndWaitForResponse(Command.GET_DEVICE_CODE);
 
     if (response.getUint8(1)) {
-      const response = await this.sendCommandAndWaitForResponse(
-        Command.GET_DEVICE_CODE_SO
-      );
+      const response =
+          await this.sendCommandAndWaitForResponse(Command.GET_DEVICE_CODE_SO);
       this.deviceCode = response.getUint16(7);
       return;
     }
@@ -322,10 +307,8 @@ export class SpeechMikeHidDevice extends DictationDeviceBase {
   }
 
   protected getButtonMappings(): Map<ButtonEvent, number> {
-    if (
-      this.hidDevice.vendorId === 0x0554 &&
-      this.hidDevice.productId === 0x0064
-    ) {
+    if (this.hidDevice.vendorId === 0x0554 &&
+        this.hidDevice.productId === 0x0064) {
       return BUTTON_MAPPINGS_POWERMIC_4;
     }
     return BUTTON_MAPPINGS_SPEECHMIKE;
@@ -342,31 +325,22 @@ export class SpeechMikeHidDevice extends DictationDeviceBase {
   protected async handleMotionEvent(data: DataView) {
     const inputBitMask = data.getUint8(8);
     const motionEvent =
-      inputBitMask === 1 ? MotionEvent.LAYED_DOWN : MotionEvent.PICKED_UP;
+        inputBitMask === 1 ? MotionEvent.LAYED_DOWN : MotionEvent.PICKED_UP;
 
-    await Promise.all(
-      [...this.motionEventListeners].map(listener =>
-        listener(this.getThisAsDictationDevice(), motionEvent)
-      )
-    );
+    await Promise.all([...this.motionEventListeners].map(
+        listener => listener(this.getThisAsDictationDevice(), motionEvent)));
   }
 
   protected async sendCommand(command: Command, input?: number[]) {
-    const data =
-      input === undefined
-        ? new Uint8Array([command])
-        : new Uint8Array([command, ...input]);
+    const data = input === undefined ? new Uint8Array([command]) :
+                                       new Uint8Array([command, ...input]);
     await this.hidDevice.sendReport(/* reportId= */ 0, data);
   }
 
   protected async sendCommandAndWaitForResponse(
-    command: Command,
-    input?: number[]
-  ): Promise<DataView> {
-    if (
-      this.commandResolvers.has(command) ||
-      this.commandTimeouts.has(command)
-    ) {
+      command: Command, input?: number[]): Promise<DataView> {
+    if (this.commandResolvers.has(command) ||
+        this.commandTimeouts.has(command)) {
       throw new Error(`Command ${command} is already running`);
     }
 
@@ -388,8 +362,7 @@ export class SpeechMikeHidDevice extends DictationDeviceBase {
 
     if (result === undefined) {
       throw new Error(
-        `Command ${command} timed out after ${COMMAND_TIMEOUT_MS}ms`
-      );
+          `Command ${command} timed out after ${COMMAND_TIMEOUT_MS}ms`);
     }
 
     return result;
