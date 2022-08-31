@@ -5,8 +5,8 @@
   "scripts": {
     "build": "npx webpack --config=webpack.config.js",
     "lint": "eslint --ignore-path .gitignore --ext .ts .",
-    "format": "git-clang-format",
-    "formatCheck": "check-clang-format \"'npm run format'\"",
+    "format": "git clang-format",
+    "formatCheck": "git clang-format --diff",
     "prepare": "husky install"
   },
   "author": "hendrich@google.com",
