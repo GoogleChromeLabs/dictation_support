@@ -46,6 +46,7 @@ export enum DeviceType {
 }
 
 export enum ButtonEvent {
+  NONE = 0,
   REWIND = 1 << 0,
   PLAY = 1 << 1,
   FORWARD = 1 << 2,
@@ -69,8 +70,8 @@ export enum ButtonEvent {
   SCAN_SUCCESS = 1 << 22,
 }
 
-export type ButtonEventListener = (device: DictationDevice, bitMask: number) =>
-    void|Promise<void>;
+export type ButtonEventListener =
+    (device: DictationDevice, bitMask: ButtonEvent) => void|Promise<void>;
 
 export abstract class DictationDeviceBase {
   private static next_id = 0;
@@ -84,7 +85,7 @@ export abstract class DictationDeviceBase {
   protected readonly onInputReportHandler = (event: HIDInputReportEvent) =>
       this.onInputReport(event);
 
-  constructor(readonly hidDevice: HIDDevice) {}
+  protected constructor(readonly hidDevice: HIDDevice) {}
 
   async init() {
     this.hidDevice.addEventListener('inputreport', this.onInputReportHandler);

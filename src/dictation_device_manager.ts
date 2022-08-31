@@ -34,7 +34,7 @@ const DEVICE_FILTERS: Readonly<
         // SpeechMike Premium Air (SMP40xx) in HID mode
         Object.freeze(
             {vendorId: 0x0911, productId: 0x0c1d, usagePage: 65440, usage: 1}),
-        // SpeechOne (PSM6000) in HID mode
+        // SpeechOne (PSM6000) in HID or Browser/Gamepad mode
         Object.freeze(
             {vendorId: 0x0911, productId: 0x0c1e, usagePage: 65440, usage: 1}),
         // All SpeechMikes in Browser/Gamepad mode
@@ -87,6 +87,12 @@ export class DictationDeviceManager {
 
   protected isInitialized = false;
 
+  constructor(protected readonly hidApi = navigator.hid) {
+    if (this.hidApi === undefined) {
+      throw new Error('WebHID is not available');
+    }
+  }
+
   getDevices(): DictationDevice[] {
     this.failIfNotInitialized();
     return [...this.devices.values()];
@@ -97,10 +103,10 @@ export class DictationDeviceManager {
       throw new Error('DictationDeviceManager already initialized');
     }
 
-    navigator.hid.addEventListener('connect', this.onConnectHandler);
-    navigator.hid.addEventListener('disconnect', this.onDisconectHandler);
+    this.hidApi.addEventListener('connect', this.onConnectHandler);
+    this.hidApi.addEventListener('disconnect', this.onDisconectHandler);
 
-    const hidDevices = await navigator.hid.getDevices();
+    const hidDevices = await this.hidApi.getDevices();
     await this.createAndAddInitializedDevices(hidDevices);
 
     this.isInitialized = true;
@@ -109,8 +115,8 @@ export class DictationDeviceManager {
   async shutdown() {
     this.failIfNotInitialized();
 
-    navigator.hid.removeEventListener('connect', this.onConnectHandler);
-    navigator.hid.removeEventListener('disconnect', this.onDisconectHandler);
+    this.hidApi.removeEventListener('connect', this.onConnectHandler);
+    this.hidApi.removeEventListener('disconnect', this.onDisconectHandler);
 
     await Promise.all([
       [...this.devices.values()].map(
@@ -124,7 +130,7 @@ export class DictationDeviceManager {
   async requestDevice(): Promise<Array<DictationDevice>> {
     this.failIfNotInitialized();
 
-    const hidDevices = await navigator.hid.requestDevice({
+    const hidDevices = await this.hidApi.requestDevice({
       filters: getFilters(),
     });
 
@@ -215,13 +221,13 @@ export class DictationDeviceManager {
     if (implType === undefined) return undefined;
     switch (implType) {
       case ImplementationType.SPEECHMIKE_HID:
-        return new SpeechMikeHidDevice(hidDevice);
+        return SpeechMikeHidDevice.create(hidDevice);
       case ImplementationType.POWERMIC_3:
-        return new PowerMic3Device(hidDevice);
+        return PowerMic3Device.create(hidDevice);
       case ImplementationType.SPEECHMIKE_GAMEPAD:
-        return new SpeechMikeGamepadDevice(hidDevice);
+        return SpeechMikeGamepadDevice.create(hidDevice);
       case ImplementationType.FOOT_CONTROL:
-        return new FootControlDevice(hidDevice);
+        return FootControlDevice.create(hidDevice);
       default:
         checkExhaustive(implType);
     }

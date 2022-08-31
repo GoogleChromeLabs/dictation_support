@@ -50,6 +50,10 @@ const BUTTON_MAPPINGS_POWERMIC_4 = new Map<ButtonEvent, number>([
 export class SpeechMikeGamepadDevice extends DictationDeviceBase {
   readonly implType = ImplementationType.SPEECHMIKE_GAMEPAD;
 
+  static create(hidDevice: HIDDevice) {
+    return new SpeechMikeGamepadDevice(hidDevice);
+  }
+
   getDeviceType(): DeviceType {
     // All SpeechMikes have the same productId (except PowerMic IV) and the lfh
     // is only available on the SpeechMikeHidDevice. Since this device is only

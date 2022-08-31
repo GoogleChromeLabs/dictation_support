@@ -171,6 +171,10 @@ export class SpeechMikeHidDevice extends DictationDeviceBase {
 
   protected proxyDevice: SpeechMikeGamepadDevice|undefined = undefined;
 
+  static create(hidDevice: HIDDevice) {
+    return new SpeechMikeHidDevice(hidDevice);
+  }
+
   override async init() {
     await super.init();
     await this.fetchDeviceCode();
@@ -240,12 +244,12 @@ export class SpeechMikeHidDevice extends DictationDeviceBase {
     }
     this.proxyDevice = proxyDevice;
     this.proxyDevice.addButtonEventListener(
-        (_device: DictationDevice, bitMask: number) =>
+        (_device: DictationDevice, bitMask: ButtonEvent) =>
             this.onProxyButtonEvent(bitMask));
   }
 
   // See comment in DictationDeviceManager
-  protected async onProxyButtonEvent(bitMask: number) {
+  protected async onProxyButtonEvent(bitMask: ButtonEvent) {
     await Promise.all([...this.buttonEventListeners].map(
         listener => listener(this.getThisAsDictationDevice(), bitMask)));
   }

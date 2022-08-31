@@ -8,9 +8,22 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "target": "es2017",
-    "lib": ["es2017", "DOM"],
-    "typeRoots": ["node_modules/@types"],
+    "lib": [
+      "es2017",
+      "DOM"
+    ],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
     "noUnusedLocals": true,
     "noUnusedParameters": true
-  }
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "src/**/*_test.ts",
+    "src/test_util/**/*"
+  ]
 }

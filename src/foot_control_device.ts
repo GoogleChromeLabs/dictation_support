@@ -27,6 +27,10 @@ const BUTTON_MAPPINGS = new Map<ButtonEvent, number>([
 export class FootControlDevice extends DictationDeviceBase {
   readonly implType = ImplementationType.FOOT_CONTROL;
 
+  static create(hidDevice: HIDDevice) {
+    return new FootControlDevice(hidDevice);
+  }
+
   getDeviceType(): DeviceType {
     if (this.hidDevice.vendorId === 0x0911) {
       if (this.hidDevice.productId === 0x1844) {

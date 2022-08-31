@@ -39,6 +39,10 @@ const BUTTON_MAPPINGS = new Map<ButtonEvent, number>([
 export class PowerMic3Device extends DictationDeviceBase {
   readonly implType = ImplementationType.POWERMIC_3;
 
+  static create(hidDevice: HIDDevice) {
+    return new PowerMic3Device(hidDevice);
+  }
+
   getDeviceType(): DeviceType {
     return DeviceType.POWERMIC_3;
   }
