@@ -108,6 +108,7 @@ export class DictationDeviceManager {
     const hidDevices = await navigator.hid.requestDevice({
       filters: getFilters(),
     });
+
     const devices = await this.createAndAddInitializedDevices(hidDevices);
     return devices;
   }
@@ -182,6 +183,9 @@ export class DictationDeviceManager {
 
   protected async createDevice(hidDevice: HIDDevice):
       Promise<DictationDevice|undefined> {
+    // Don't recreate devices for known devices.
+    if (this.devices.has(hidDevice)) return undefined;
+
     const implType = getImplType(hidDevice);
     if (implType === undefined) return undefined;
     switch (implType) {
