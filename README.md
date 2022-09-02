@@ -71,5 +71,5 @@ To build the SDK, run `npm run build`, which will create the following set of fi
 Feel free to send pull-requests! All code changes must be:
 * approved by a project maintainer
 * pass linting (use `npm run lint`)
-* properly formatted (use `npm run format` or `npm run formatCheck`)
+* be properly formatted (use `npm run format` or `npm run formatCheck`)
 * pass tests (use `npm test`)
