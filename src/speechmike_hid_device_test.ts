@@ -66,28 +66,28 @@ describe('SpeechMikeHidDevice', () => {
         await createDictationDevice({vendorId: 0x0911, productId: 0x0c1c});
         prepareResponse([131], [131, 2, 0, 0, 0, 0, 50, 0, 85]);  // IS_PREMIUM
         prepareResponse(
-          [135], [135, 0, 0, 0, 0, 0, 0, 12, 138]);  // GET_DEVICE_CODE_SM3
+            [135], [135, 0, 0, 0, 0, 0, 0, 12, 138]);  // GET_DEVICE_CODE_SM3
         break;
       }
       case DeviceType.SPEECHMIKE_LFH_3220: {
         await createDictationDevice({vendorId: 0x0911, productId: 0x0c1c});
         prepareResponse([131], [131, 2, 0, 0, 0, 0, 50, 0, 85]);  // IS_PREMIUM
         prepareResponse(
-          [135], [135, 0, 0, 0, 0, 0, 0, 12, 148]);  // GET_DEVICE_CODE_SM3
+            [135], [135, 0, 0, 0, 0, 0, 0, 12, 148]);  // GET_DEVICE_CODE_SM3
         break;
       }
       case DeviceType.SPEECHMIKE_LFH_3300: {
         await createDictationDevice({vendorId: 0x0911, productId: 0x0c1c});
         prepareResponse([131], [131, 2, 0, 0, 0, 0, 50, 0, 85]);  // IS_PREMIUM
         prepareResponse(
-          [135], [135, 0, 0, 0, 0, 0, 0, 12, 228]);  // GET_DEVICE_CODE_SM3
+            [135], [135, 0, 0, 0, 0, 0, 0, 12, 228]);  // GET_DEVICE_CODE_SM3
         break;
       }
       case DeviceType.SPEECHMIKE_LFH_3310: {
         await createDictationDevice({vendorId: 0x0911, productId: 0x0c1c});
         prepareResponse([131], [131, 2, 0, 0, 0, 0, 50, 0, 85]);  // IS_PREMIUM
         prepareResponse(
-          [135], [135, 0, 0, 0, 0, 0, 0, 12, 238]);  // GET_DEVICE_CODE_SM3
+            [135], [135, 0, 0, 0, 0, 0, 0, 12, 238]);  // GET_DEVICE_CODE_SM3
         break;
       }
       case DeviceType.SPEECHMIKE_LFH_3500: {
@@ -202,24 +202,15 @@ describe('SpeechMikeHidDevice', () => {
 
   describe('creates the right device type', () => {
     const testCases: DeviceType[] = [
-      DeviceType.SPEECHMIKE_LFH_3200,
-      DeviceType.SPEECHMIKE_LFH_3210,
-      DeviceType.SPEECHMIKE_LFH_3220,
-      DeviceType.SPEECHMIKE_LFH_3300,
-      DeviceType.SPEECHMIKE_LFH_3310,
-      DeviceType.SPEECHMIKE_LFH_3500,
-      DeviceType.SPEECHMIKE_LFH_3510,
-      DeviceType.SPEECHMIKE_LFH_3520,
-      DeviceType.SPEECHMIKE_LFH_3600,
-      DeviceType.SPEECHMIKE_LFH_3610,
-      DeviceType.SPEECHMIKE_SMP_3700,
-      DeviceType.SPEECHMIKE_SMP_3710,
-      DeviceType.SPEECHMIKE_SMP_3720,
-      DeviceType.SPEECHMIKE_SMP_3800,
-      DeviceType.SPEECHMIKE_SMP_3810,
-      DeviceType.SPEECHMIKE_SMP_4000,
-      DeviceType.SPEECHMIKE_SMP_4010,
-      DeviceType.SPEECHONE_PSM_6000,
+      DeviceType.SPEECHMIKE_LFH_3200, DeviceType.SPEECHMIKE_LFH_3210,
+      DeviceType.SPEECHMIKE_LFH_3220, DeviceType.SPEECHMIKE_LFH_3300,
+      DeviceType.SPEECHMIKE_LFH_3310, DeviceType.SPEECHMIKE_LFH_3500,
+      DeviceType.SPEECHMIKE_LFH_3510, DeviceType.SPEECHMIKE_LFH_3520,
+      DeviceType.SPEECHMIKE_LFH_3600, DeviceType.SPEECHMIKE_LFH_3610,
+      DeviceType.SPEECHMIKE_SMP_3700, DeviceType.SPEECHMIKE_SMP_3710,
+      DeviceType.SPEECHMIKE_SMP_3720, DeviceType.SPEECHMIKE_SMP_3800,
+      DeviceType.SPEECHMIKE_SMP_3810, DeviceType.SPEECHMIKE_SMP_4000,
+      DeviceType.SPEECHMIKE_SMP_4010, DeviceType.SPEECHONE_PSM_6000,
       DeviceType.POWERMIC_4,
     ];
 
