@@ -70,8 +70,9 @@ enum Command {
   SET_LED = 0x02,
   SET_EVENT_MODE = 0x0d,
   BUTTON_PRESS_EVENT = 0x80,
-  ENABLE_SPEECHMIKE_PREMIUM = 0x83,
-  GET_DEVICE_CODE = 0x8b,
+  IS_SPEECHMIKE_PREMIUM = 0x83,
+  GET_DEVICE_CODE_SM3 = 0x87,
+  GET_DEVICE_CODE_SMP = 0x8b,
   GET_DEVICE_CODE_SO = 0x96,
   GET_EVENT_MODE = 0x8d,
   WIRELESS_STATUS_EVENT = 0x94,
@@ -275,21 +276,36 @@ export class SpeechMikeHidDevice extends DictationDeviceBase {
   }
 
   protected async fetchDeviceCode() {
-    const response =
-        await this.sendCommandAndWaitForResponse(Command.GET_DEVICE_CODE);
+    let response =
+        await this.sendCommandAndWaitForResponse(Command.IS_SPEECHMIKE_PREMIUM);
 
-    if (response.getUint8(1)) {
-      const response =
-          await this.sendCommandAndWaitForResponse(Command.GET_DEVICE_CODE_SO);
+    if (response.getUint8(8) & 0x80) {
+      // SpeechMike Premium or later. Let´s check whether it´s a SpeechOne,
+      // or get the device code otherwise
+      response =
+          await this.sendCommandAndWaitForResponse(Command.GET_DEVICE_CODE_SMP);
+
+      if (response.getUint8(1)) {
+        // SpeechOne or later. We look for the device code somewhere else
+        response = await this.sendCommandAndWaitForResponse(
+            Command.GET_DEVICE_CODE_SO);
+        // get SpeechOne device code
+        this.deviceCode = response.getUint16(7);
+
+      } else {
+        // get SpeechMike Premium/Touch/Air device code
+        const smpaCode = response.getUint16(2);
+        const smptCode = response.getUint16(4);
+        const smpCode = response.getUint16(6);
+
+        this.deviceCode = Math.max(smpCode, smptCode, smpaCode);
+      }
+    } else {
+      response =
+          await this.sendCommandAndWaitForResponse(Command.GET_DEVICE_CODE_SM3);
+      // get SpeechMike 3 device code
       this.deviceCode = response.getUint16(7);
-      return;
     }
-
-    const smpCode = response.getUint16(2);
-    const smptCode = response.getUint16(4);
-    const smpaCode = response.getUint16(6);
-
-    this.deviceCode = Math.max(smpCode, smptCode, smpaCode);
   }
 
   protected override async onInputReport(event: HIDInputReportEvent) {

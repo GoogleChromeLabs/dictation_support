@@ -55,90 +55,142 @@ describe('SpeechMikeHidDevice', () => {
 
   async function createDictationDeviceForType(deviceType: DeviceType) {
     switch (deviceType) {
+      case DeviceType.SPEECHMIKE_LFH_3200: {
+        await createDictationDevice({vendorId: 0x0911, productId: 0x0c1c});
+        prepareResponse([131], [131, 2, 0, 0, 0, 0, 50, 0, 85]);  // IS_PREMIUM
+        prepareResponse(
+            [135], [135, 0, 0, 0, 0, 0, 0, 12, 128]);  // GET_DEVICE_CODE_SM3
+        break;
+      }
+      case DeviceType.SPEECHMIKE_LFH_3210: {
+        await createDictationDevice({vendorId: 0x0911, productId: 0x0c1c});
+        prepareResponse([131], [131, 2, 0, 0, 0, 0, 50, 0, 85]);  // IS_PREMIUM
+        prepareResponse(
+          [135], [135, 0, 0, 0, 0, 0, 0, 12, 138]);  // GET_DEVICE_CODE_SM3
+        break;
+      }
+      case DeviceType.SPEECHMIKE_LFH_3220: {
+        await createDictationDevice({vendorId: 0x0911, productId: 0x0c1c});
+        prepareResponse([131], [131, 2, 0, 0, 0, 0, 50, 0, 85]);  // IS_PREMIUM
+        prepareResponse(
+          [135], [135, 0, 0, 0, 0, 0, 0, 12, 148]);  // GET_DEVICE_CODE_SM3
+        break;
+      }
+      case DeviceType.SPEECHMIKE_LFH_3300: {
+        await createDictationDevice({vendorId: 0x0911, productId: 0x0c1c});
+        prepareResponse([131], [131, 2, 0, 0, 0, 0, 50, 0, 85]);  // IS_PREMIUM
+        prepareResponse(
+          [135], [135, 0, 0, 0, 0, 0, 0, 12, 228]);  // GET_DEVICE_CODE_SM3
+        break;
+      }
+      case DeviceType.SPEECHMIKE_LFH_3310: {
+        await createDictationDevice({vendorId: 0x0911, productId: 0x0c1c});
+        prepareResponse([131], [131, 2, 0, 0, 0, 0, 50, 0, 85]);  // IS_PREMIUM
+        prepareResponse(
+          [135], [135, 0, 0, 0, 0, 0, 0, 12, 238]);  // GET_DEVICE_CODE_SM3
+        break;
+      }
       case DeviceType.SPEECHMIKE_LFH_3500: {
         await createDictationDevice({vendorId: 0x0911, productId: 0x0c1c});
+        prepareResponse([131], [131, 0, 0, 0, 1, 0, 50, 1, 149]);  // IS_PREMIUM
         prepareResponse(
-            [139], [139, 0, 0, 0, 0, 0, 13, 172, 0]);  // GET_DEVICE_CODE
+            [139], [139, 0, 0, 0, 0, 0, 13, 172, 0]);  // GET_DEVICE_CODE_SMP
         break;
       }
       case DeviceType.SPEECHMIKE_LFH_3510: {
         await createDictationDevice({vendorId: 0x0911, productId: 0x0c1c});
+        prepareResponse([131], [131, 0, 0, 0, 1, 0, 50, 1, 149]);  // IS_PREMIUM
         prepareResponse(
-            [139], [139, 0, 0, 0, 0, 0, 13, 182, 0]);  // GET_DEVICE_CODE
+            [139], [139, 0, 0, 0, 0, 0, 13, 182, 0]);  // GET_DEVICE_CODE_SMP
         break;
       }
       case DeviceType.SPEECHMIKE_LFH_3520: {
         await createDictationDevice({vendorId: 0x0911, productId: 0x0c1c});
+        prepareResponse([131], [131, 0, 0, 0, 1, 0, 50, 1, 149]);  // IS_PREMIUM
         prepareResponse(
-            [139], [139, 0, 0, 0, 0, 0, 13, 192, 0]);  // GET_DEVICE_CODE
+            [139], [139, 0, 0, 0, 0, 0, 13, 192, 0]);  // GET_DEVICE_CODE_SMP
         break;
       }
       case DeviceType.SPEECHMIKE_LFH_3600: {
         await createDictationDevice({vendorId: 0x0911, productId: 0x0c1c});
+        prepareResponse([131], [131, 0, 0, 0, 1, 0, 50, 1, 149]);  // IS_PREMIUM
         prepareResponse(
-            [139], [139, 0, 0, 0, 0, 0, 14, 16, 0]);  // GET_DEVICE_CODE
+            [139], [139, 0, 0, 0, 0, 0, 14, 16, 0]);  // GET_DEVICE_CODE_SMP
         break;
       }
       case DeviceType.SPEECHMIKE_LFH_3610: {
         await createDictationDevice({vendorId: 0x0911, productId: 0x0c1c});
+        prepareResponse([131], [131, 0, 0, 0, 1, 0, 50, 1, 149]);  // IS_PREMIUM
         prepareResponse(
-            [139], [139, 0, 0, 0, 0, 0, 14, 26, 0]);  // GET_DEVICE_CODE
+            [139], [139, 0, 0, 0, 0, 0, 14, 26, 0]);  // GET_DEVICE_CODE_SMP
         break;
       }
       case DeviceType.SPEECHMIKE_SMP_3700: {
         await createDictationDevice({vendorId: 0x0911, productId: 0x0c1c});
+        prepareResponse([131], [131, 0, 0, 0, 1, 0, 50, 1, 149]);  // IS_PREMIUM
         prepareResponse(
-            [139], [139, 0, 0, 0, 0, 0, 14, 116, 0]);  // GET_DEVICE_CODE
+            [139], [139, 0, 0, 0, 0, 0, 14, 116, 0]);  // GET_DEVICE_CODE_SMP
         break;
       }
       case DeviceType.SPEECHMIKE_SMP_3710: {
         await createDictationDevice({vendorId: 0x0911, productId: 0x0c1c});
+        prepareResponse([131], [131, 0, 0, 0, 1, 0, 50, 1, 149]);  // IS_PREMIUM
         prepareResponse(
-            [139], [139, 0, 0, 0, 0, 0, 14, 126, 0]);  // GET_DEVICE_CODE
+            [139], [139, 0, 0, 0, 0, 0, 14, 126, 0]);  // GET_DEVICE_CODE_SMP
         break;
       }
       case DeviceType.SPEECHMIKE_SMP_3720: {
         await createDictationDevice({vendorId: 0x0911, productId: 0x0c1c});
+        prepareResponse([131], [131, 0, 0, 0, 1, 0, 50, 1, 149]);  // IS_PREMIUM
         prepareResponse(
-            [139], [139, 0, 0, 0, 0, 0, 14, 136, 0]);  // GET_DEVICE_CODE
+            [139], [139, 0, 0, 0, 0, 0, 14, 136, 0]);  // GET_DEVICE_CODE_SMP
         break;
       }
       case DeviceType.SPEECHMIKE_SMP_3800: {
         await createDictationDevice({vendorId: 0x0911, productId: 0x0c1c});
+        prepareResponse([131], [131, 0, 0, 0, 1, 0, 50, 1, 149]);  // IS_PREMIUM
         prepareResponse(
-            [139], [139, 0, 0, 0, 14, 216, 14, 16, 0]);  // GET_DEVICE_CODE
+            [139], [139, 0, 0, 0, 14, 216, 14, 16, 0]);  // GET_DEVICE_CODE_SMP
         break;
       }
       case DeviceType.SPEECHMIKE_SMP_3810: {
         await createDictationDevice({vendorId: 0x0911, productId: 0x0c1c});
+        prepareResponse([131], [131, 0, 0, 0, 1, 0, 50, 1, 149]);  // IS_PREMIUM
         prepareResponse(
-            [139], [139, 0, 0, 0, 14, 226, 14, 26, 0]);  // GET_DEVICE_CODE
+            [139], [139, 0, 0, 0, 14, 226, 14, 26, 0]);  // GET_DEVICE_CODE_SMP
         break;
       }
       case DeviceType.SPEECHMIKE_SMP_4000: {
         await createDictationDevice({vendorId: 0x0911, productId: 0x0c1d});
+        prepareResponse([131], [131, 0, 0, 0, 1, 0, 50, 1, 149]);  // IS_PREMIUM
         prepareResponse(
-            [139], [139, 0, 15, 160, 14, 116, 13, 172, 0]);  // GET_DEVICE_CODE
+            [139],
+            [139, 0, 15, 160, 14, 116, 13, 172, 0]);  // GET_DEVICE_CODE_SMP
         break;
       }
       case DeviceType.SPEECHMIKE_SMP_4010: {
         await createDictationDevice({vendorId: 0x0911, productId: 0x0c1d});
+        prepareResponse([131], [131, 0, 0, 0, 1, 0, 50, 1, 149]);  // IS_PREMIUM
         prepareResponse(
-            [139], [139, 0, 15, 170, 14, 126, 13, 182, 0]);  // GET_DEVICE_CODE
+            [139],
+            [139, 0, 15, 170, 14, 126, 13, 182, 0]);  // GET_DEVICE_CODE_SMP
         break;
       }
       case DeviceType.SPEECHONE_PSM_6000: {
         await createDictationDevice({vendorId: 0x0911, productId: 0x0c1e});
+        prepareResponse([131], [131, 0, 0, 0, 1, 0, 50, 1, 149]);  // IS_PREMIUM
         prepareResponse(
-            [139], [139, 1, 15, 160, 14, 116, 13, 172, 0]);  // GET_DEVICE_CODE
+            [139],
+            [139, 1, 15, 160, 14, 116, 13, 172, 0]);  // GET_DEVICE_CODE_SMP
         prepareResponse(
             [150], [150, 0, 0, 0, 0, 0, 0, 23, 113]);  // GET_DEVICE_CODE_SO
         break;
       }
       case DeviceType.POWERMIC_4: {
         await createDictationDevice({vendorId: 0x0554, productId: 0x0064});
+        prepareResponse([131], [131, 0, 0, 0, 1, 0, 50, 1, 149]);  // IS_PREMIUM
         prepareResponse(
-            [139], [139, 0, 0, 0, 14, 116, 13, 172, 0]);  // GET_DEVICE_CODE
+            [139], [139, 0, 0, 0, 14, 116, 13, 172, 0]);  // GET_DEVICE_CODE_SMP
         break;
       }
       default: {
@@ -150,6 +202,11 @@ describe('SpeechMikeHidDevice', () => {
 
   describe('creates the right device type', () => {
     const testCases: DeviceType[] = [
+      DeviceType.SPEECHMIKE_LFH_3200,
+      DeviceType.SPEECHMIKE_LFH_3210,
+      DeviceType.SPEECHMIKE_LFH_3220,
+      DeviceType.SPEECHMIKE_LFH_3300,
+      DeviceType.SPEECHMIKE_LFH_3310,
       DeviceType.SPEECHMIKE_LFH_3500,
       DeviceType.SPEECHMIKE_LFH_3510,
       DeviceType.SPEECHMIKE_LFH_3520,
