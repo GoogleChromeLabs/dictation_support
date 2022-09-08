@@ -14,7 +14,7 @@ TODO: host latest release and link here
 
 ###  Supported devices
 | Dictation microphones                    | Foot controls   |
-|------------------------------------------|-----------------|
+|:-----------------------------------------|:----------------|
 | Philips SpeechMike Premium LFH3500       | Philips ACC2310 |
 | Philips SpeechMike Premium LFH3510       | Philips ACC2320 |
 | Philips SpeechMike Premium LFH3520       | Philips ACC2330 |
