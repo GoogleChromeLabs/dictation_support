@@ -13,25 +13,31 @@ You can test out the SDK capabilities with a supported device using this [demo w
 TODO: host latest release and link here
 
 ###  Supported devices
-* Philips
-  * SpeechMike LFH
-    * 3500
-    * 3510
-    * 3520
-    * 3600
-    * 3610
-   * SpeechMike SMP
-     * 3700
-     * 3710
-     * 3720
-     * 3800
-     * 3810
-     * 4000
-     * 4010
-    * SpeechOne PSM 6000
-* Nuance
-  * PowerMic 3
-  * PowerMic 4
+| Dictation microphones                    | Foot controls   |
+|------------------------------------------|-----------------|
+| Philips SpeechMike Premium LFH3500       | Philips ACC2310 |
+| Philips SpeechMike Premium LFH3510       | Philips ACC2320 |
+| Philips SpeechMike Premium LFH3520       | Philips ACC2330 |
+| Philips SpeechMike Premium LFH3600       |                 |
+| Philips SpeechMike Premium LFH3610       |                 |
+| Philips SpeechMike Premium Touch SMP3700 |                 |
+| Philips SpeechMike Premium Touch SMP3710 |                 |
+| Philips SpeechMike Premium Touch SMP3720 |                 |
+| Philips SpeechMike Premium Touch SMP3800 |                 |
+| Philips SpeechMike Premium Touch SMP3810 |                 |
+| Philips SpeechMike Premium Air SMP4000   |                 |
+| Philips SpeechMike Premium Air SMP4010   |                 |
+| Philips SpeechOne PSM6000                |                 |
+| Nuance PowerMic III                      |                 |
+| Nuance PowerMic 4                        |                 |
+|                                          |                 |
+
+###  Supported platforms
+* Google Chrome on Windows, macOS, Linux and Chrome OS (Chromebooks)
+* Microsoft Edge on Windows and macOS
+
+#### Note
+If your browser runs remotely (e.g. Citrix Virtual Apps and Desktops, VMware Horizon...) you need to have the dictation device buttons redirected on USB level. Please follow documentation provided by the virtualization platform vendors.
 
 ##  How to use
 
