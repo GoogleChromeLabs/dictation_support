@@ -14,10 +14,7 @@ module.exports = function(config) {
     preprocessors: {
       '**/*.ts': ['webpack'],
     },
-    webpack: {
-      module: webpackConfig.module,
-      resolve: webpackConfig.resolve,
-    },
+    webpack: webpackConfig,
     reporters: ['progress'],
     port: 9876,
     colors: true,
