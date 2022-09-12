@@ -2,10 +2,11 @@ import {ButtonEvent, DictationDeviceBase} from '../dictation_device_base';
 
 import {FakeHidDevice} from './fake_hid_device';
 
-export type ButtonMappingTestCase = {
-  inputReportData: number[],
-  expectedButtonEvents: ButtonEvent|undefined,
-}
+export type ButtonMappingTestCase =
+    {
+      inputReportData: number[],
+      expectedButtonEvents: ButtonEvent|undefined,
+    }
 
 /*
    Runs through all `testCases` and emulates the respective `inputReportData`
@@ -54,6 +55,30 @@ export async function checkButtonMapping(
     else {
       expect(buttonEventListener)
           .withContext(contextMessageButtonRelease)
+          .not.toHaveBeenCalled();
+    }
+  }
+}
+
+export async function checkSliderMapping(
+    fakeHidDevice: FakeHidDevice, expectedDicationDevice: DictationDeviceBase,
+    buttonEventListener: jasmine.Spy, testCases: ButtonMappingTestCase[]) {
+  for (let i = 0; i < testCases.length; ++i) {
+    const testCase = testCases[i];
+    // Move slider
+    buttonEventListener.calls.reset();
+    await fakeHidDevice.handleInputReport(testCase.inputReportData);
+    const contextMessageButtonPress =
+        `for test case ${i} (inputReport [${testCase.inputReportData})]`
+    if (testCase.expectedButtonEvents !== undefined) {
+      expect(buttonEventListener)
+          .withContext(contextMessageButtonPress)
+          .toHaveBeenCalledOnceWith(
+              expectedDicationDevice, testCase.expectedButtonEvents);
+    }
+    else {
+      expect(buttonEventListener)
+          .withContext(contextMessageButtonPress)
           .not.toHaveBeenCalled();
     }
   }
