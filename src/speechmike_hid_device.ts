@@ -390,10 +390,6 @@ export class SpeechMikeHidDevice extends DictationDeviceBase {
   }
 
   protected async handleButtonPress(data: DataView) {
-    // TODO: hier drin mach ich das sliderpos filtering. ich könnte es auch in
-    // base machen aber da ist so viel SM zeug drin das möcht ich dort nicht
-    // sehen, deshalb überschreib ich sie hier
-
     const buttonMappings = this.getButtonMappings();
     const inputBitMask = this.getInputBitmask(data);
     let outputBitMask = 0;
