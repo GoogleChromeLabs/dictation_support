@@ -159,12 +159,25 @@ const SIMPLE_LED_STATES: Readonly<Record<SimpleLedState, Readonly<LedState>>> =
           LED_STATE_RECORD_STANDBY_OVERWRITE,
     });
 
+const PHI_SLIDERS = Object.freeze([
+  DeviceType.SPEECHMIKE_LFH_3220, DeviceType.SPEECHMIKE_LFH_3520,
+  DeviceType.SPEECHMIKE_SMP_3720
+]);
+const INT_SLIDERS = Object.freeze([
+  DeviceType.SPEECHMIKE_LFH_3210, DeviceType.SPEECHMIKE_LFH_3310,
+  DeviceType.SPEECHMIKE_LFH_3510, DeviceType.SPEECHMIKE_LFH_3610,
+  DeviceType.SPEECHMIKE_SMP_3710, DeviceType.SPEECHMIKE_SMP_3810,
+  DeviceType.SPEECHMIKE_SMP_4010
+]);
+
 export class SpeechMikeHidDevice extends DictationDeviceBase {
   readonly implType = ImplementationType.SPEECHMIKE_HID;
 
   protected deviceCode = 0;
-  protected sliderPosAtPressed = 0;
   protected ledState: LedState = {...LED_STATE_OFF};
+  protected sliderBitsFilter = 0;
+  protected lastSliderValue = 0;
+  protected lastButtonValue = 0;
 
   protected commandResolvers = new Map<Command, (data: DataView) => void>();
   protected commandTimeouts = new Map<Command, number>();
@@ -180,6 +193,7 @@ export class SpeechMikeHidDevice extends DictationDeviceBase {
   override async init() {
     await super.init();
     await this.fetchDeviceCode();
+    this.determineSliderBitsFilter();
   }
 
   override async shutdown() {
@@ -309,6 +323,17 @@ export class SpeechMikeHidDevice extends DictationDeviceBase {
     }
   }
 
+  protected determineSliderBitsFilter() {
+    if (PHI_SLIDERS.includes(this.deviceCode)) {
+      this.sliderBitsFilter = ButtonEvent.FORWARD + ButtonEvent.STOP +
+          ButtonEvent.PLAY + ButtonEvent.REWIND;
+    } else if (INT_SLIDERS.includes(this.deviceCode)) {
+      // INT slider
+      this.sliderBitsFilter = ButtonEvent.RECORD + ButtonEvent.STOP +
+          ButtonEvent.PLAY + ButtonEvent.REWIND;
+    }
+  }
+
   protected override async onInputReport(event: HIDInputReportEvent) {
     const data = event.data;
     const command = data.getUint8(0);
@@ -389,61 +414,36 @@ export class SpeechMikeHidDevice extends DictationDeviceBase {
     return result;
   }
 
-  protected async handleButtonPress(data: DataView) {
-    const buttonMappings = this.getButtonMappings();
-    const inputBitMask = this.getInputBitmask(data);
-    let outputBitMask = 0;
-    for (const [buttonEvent, buttonMapping] of buttonMappings) {
-      if (inputBitMask & buttonMapping) outputBitMask |= buttonEvent;
+  // For slider SpeechMikes the slider position is always added to any
+  // non-slider button event (2 bits set in the bitmask in this case). We
+  // don´t need that, so we unset the slider position bit
+  protected override filterOutputBitMask(outputBitMask: number): number {
+    // Return unfiltered bitmask if the device is not a slider device.
+    if (!this.sliderBitsFilter) return outputBitMask;
+
+    const buttonBitsFilter = ~this.sliderBitsFilter;
+
+    const sliderValue = outputBitMask & this.sliderBitsFilter;
+    const buttonValue = outputBitMask & buttonBitsFilter;
+
+    const sliderChanged = sliderValue !== this.lastSliderValue;
+    const buttonChanged = buttonValue !== this.lastButtonValue;
+
+    this.lastSliderValue = sliderValue;
+    this.lastButtonValue = buttonValue;
+
+    if (sliderChanged && buttonChanged) {
+      // This can only happen with the first button event, in which case we only
+      // care about the button event.
+      return outputBitMask & buttonBitsFilter;
+    } else if (sliderChanged) {
+      // Only return slider bits
+      return outputBitMask & this.sliderBitsFilter;
+    } else if (buttonChanged) {
+      // Only return button bits
+      return outputBitMask & buttonBitsFilter;
     }
 
-    if (outputBitMask === this.lastBitMask) return;
-    this.lastBitMask = outputBitMask;
-
-
-    // For slider SpeechMikes the slider position is always added to any
-    // non-slider button event (2 bits set in the bitmask in this case). We
-    // don´t need that, so we unset the slider position bit
-
-    let sliderBits = 0;
-
-    if ([3220, 3520, 3720].includes(this.deviceCode)) {
-      // PHI slider
-      sliderBits = ButtonEvent.FORWARD + ButtonEvent.STOP + ButtonEvent.PLAY +
-          ButtonEvent.REWIND;
-    } else if ([3210, 3310, 3510, 3610, 3710, 3810, 4010].includes(
-                   this.deviceCode)) {
-      // INT slider
-      sliderBits = ButtonEvent.RECORD + ButtonEvent.STOP + ButtonEvent.PLAY +
-          ButtonEvent.REWIND;
-    }
-
-    if (sliderBits) {
-      // first we handle the non-slider button pressed event. For that, we check
-      // if any non-slider button bit is set
-      if (outputBitMask & ~sliderBits) {
-        // now we save the slider pos bit (there is always a slider pos bit set)
-        // for later, because we have to unset it in the released event as well.
-        this.sliderPosAtPressed = outputBitMask & sliderBits;
-
-        // and we unset the slider pos bit in the bitmask
-        outputBitMask -= this.sliderPosAtPressed;
-      }
-      // now we handle either a non-slider button released event or a slider
-      // movement event
-      else if (outputBitMask & sliderBits) {
-        // if sliderPosAtPressed is set, this must be a non slider button
-        // released event. in this case, we need to unset the slider pos bit
-        // again. we don´t filter or unset anything if this is just a slider
-        // movement event
-        if (this.sliderPosAtPressed) {
-          outputBitMask -= this.sliderPosAtPressed;
-          this.sliderPosAtPressed = 0;
-        }
-      }
-    }
-
-    await Promise.all([...this.buttonEventListeners].map(
-        listener => listener(this.getThisAsDictationDevice(), outputBitMask)));
+    return outputBitMask;
   }
 }

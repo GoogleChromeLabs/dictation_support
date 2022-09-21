@@ -104,9 +104,10 @@ describe('DictationDeviceBase', () => {
           expectedButtonEvents: ButtonEvent.PLAY | ButtonEvent.RECORD
         },
       ];
+      const resetButtonInputReport = [0];
       await checkButtonMapping(
           state.fakeHidDevice, state.dictationDevice, state.buttonEventListener,
-          testCases);
+          testCases, resetButtonInputReport);
     });
 
     it('does not fire event twice if unchanged', async () => {

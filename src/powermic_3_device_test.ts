@@ -82,9 +82,10 @@ describe('PowerMic3Device', () => {
         expectedButtonEvents: undefined,
       },
     ];
+    const resetButtonInputReport = [0, 0, 0];
     await checkButtonMapping(
         state.fakeHidDevice, state.dictationDevice, state.buttonEventListener,
-        testCases);
+        testCases, resetButtonInputReport);
   });
 
   it('sends commands to set LEDs', async () => {

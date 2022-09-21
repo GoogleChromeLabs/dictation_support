@@ -1,7 +1,7 @@
 import {ButtonEvent, ButtonEventListener, DeviceType, ImplementationType} from './dictation_device_base';
 import {SpeechMikeGamepadDevice} from './speechmike_gamepad_device';
 import {LedIndex, LedMode, MotionEvent, SimpleLedState, SpeechMikeHidDevice} from './speechmike_hid_device';
-import {ButtonMappingTestCase, checkButtonMapping, checkSliderMapping} from './test_util/check_button_mapping';
+import {ButtonMappingTestCase, checkButtonMapping} from './test_util/check_button_mapping';
 import {cleanState} from './test_util/clean_state';
 import {FakeHidDevice} from './test_util/fake_hid_device';
 
@@ -534,176 +534,238 @@ describe('SpeechMikeHidDevice', () => {
           testCases, resetButtonInputReport);
     });
 
+    describe('SpeechMikes_INTSlider', () => {
+      beforeEach(async () => {
+        await createDictationDeviceForType(DeviceType.SPEECHMIKE_SMP_3710);
+      });
 
+      it('Buttons', async () => {
+        const testCases: ButtonMappingTestCase[] = [
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 1, 0],
+            expectedButtonEvents: ButtonEvent.SCAN_END
+          },
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 2, 0],
+            expectedButtonEvents: ButtonEvent.F1_A
+          },
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 4, 0],
+            expectedButtonEvents: ButtonEvent.F2_B
+          },
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 8, 0],
+            expectedButtonEvents: ButtonEvent.F3_C
+          },
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 16, 0],
+            expectedButtonEvents: ButtonEvent.F4_D
+          },
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 32, 0],
+            expectedButtonEvents: ButtonEvent.COMMAND
+          },
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 64, 0],
+            expectedButtonEvents: undefined
+          },
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 128, 0],
+            expectedButtonEvents: ButtonEvent.SCAN_SUCCESS
+          },
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 8],
+            expectedButtonEvents: ButtonEvent.FORWARD
+          },
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 32],
+            expectedButtonEvents: ButtonEvent.EOL_PRIO
+          },
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 64],
+            expectedButtonEvents: ButtonEvent.INS_OVR
+          },
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 128],
+            expectedButtonEvents: ButtonEvent.INSTR
+          },
+        ];
+        const resetButtonInputReport = [128, 0, 0, 0, 0, 0, 0, 0, 0];
+        await checkButtonMapping(
+            state.fakeHidDevice, state.dictationDevice,
+            state.buttonEventListener, testCases, resetButtonInputReport);
+      });
 
-    it('SpeechMikes_INTSlider_Buttons', async () => {
-      await createDictationDeviceForType(DeviceType.SPEECHMIKE_SMP_3710);
+      it('Slider', async () => {
+        const testCases: ButtonMappingTestCase[] = [
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 1],
+            expectedButtonEvents: ButtonEvent.RECORD
+          },
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 2],
+            expectedButtonEvents: ButtonEvent.STOP
+          },
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 4],
+            expectedButtonEvents: ButtonEvent.PLAY
+          },
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 16],
+            expectedButtonEvents: ButtonEvent.REWIND
+          },
+        ];
+        const resetInputReport = undefined;  // no reset
+        await checkButtonMapping(
+            state.fakeHidDevice, state.dictationDevice,
+            state.buttonEventListener, testCases, resetInputReport);
+      });
 
-      const testCases: ButtonMappingTestCase[] = [
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 1, 1],
-          expectedButtonEvents: ButtonEvent.SCAN_END
-        },
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 2, 1],
-          expectedButtonEvents: ButtonEvent.F1_A
-        },
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 4, 1],
-          expectedButtonEvents: ButtonEvent.F2_B
-        },
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 8, 1],
-          expectedButtonEvents: ButtonEvent.F3_C
-        },
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 16, 1],
-          expectedButtonEvents: ButtonEvent.F4_D
-        },
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 32, 1],
-          expectedButtonEvents: ButtonEvent.COMMAND
-        },
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 64, 1],
-          expectedButtonEvents: undefined
-        },
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 128, 1],
-          expectedButtonEvents: ButtonEvent.SCAN_SUCCESS
-        },
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 9],
-          expectedButtonEvents: ButtonEvent.FORWARD
-        },
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 33],
-          expectedButtonEvents: ButtonEvent.EOL_PRIO
-        },
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 65],
-          expectedButtonEvents: ButtonEvent.INS_OVR
-        },
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 129],
-          expectedButtonEvents: ButtonEvent.INSTR
-        },
-      ];
-      const resetButtonInputReport = [128, 0, 0, 0, 0, 0, 0, 0, 1];
-      await checkButtonMapping(
-          state.fakeHidDevice, state.dictationDevice, state.buttonEventListener,
-          testCases, resetButtonInputReport);
+      it('Slider + Button', async () => {
+        const testCases: ButtonMappingTestCase[] = [
+          {
+            // Button: SCAN_END, Slider: PLAY
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 1, 4],
+            expectedButtonEvents: ButtonEvent.SCAN_END
+          },
+          {
+            // Button: None, Slider: PLAY
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 4],
+            expectedButtonEvents: ButtonEvent.NONE
+          },
+          {
+            // Button: None, Slider: STOP
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 2],
+            expectedButtonEvents: ButtonEvent.STOP
+          },
+          {
+            // Button: F1_A, Slider: STOP
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 2, 2],
+            expectedButtonEvents: ButtonEvent.F1_A
+          },
+        ];
+        const resetInputReport = undefined;  // no reset
+        await checkButtonMapping(
+            state.fakeHidDevice, state.dictationDevice,
+            state.buttonEventListener, testCases, resetInputReport);
+      });
     });
 
-    it('SpeechMikes_PHISlider_Buttons', async () => {
-      await createDictationDeviceForType(DeviceType.SPEECHMIKE_LFH_3520);
+    describe('SpeechMikes_PHISlider', () => {
+      beforeEach(async () => {
+        await createDictationDeviceForType(DeviceType.SPEECHMIKE_LFH_3520);
+      });
 
-      const testCases: ButtonMappingTestCase[] = [
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 1, 2],
-          expectedButtonEvents: ButtonEvent.SCAN_END
-        },
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 2, 2],
-          expectedButtonEvents: ButtonEvent.F1_A
-        },
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 4, 2],
-          expectedButtonEvents: ButtonEvent.F2_B
-        },
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 8, 2],
-          expectedButtonEvents: ButtonEvent.F3_C
-        },
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 16, 2],
-          expectedButtonEvents: ButtonEvent.F4_D
-        },
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 32, 2],
-          expectedButtonEvents: ButtonEvent.COMMAND
-        },
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 64, 2],
-          expectedButtonEvents: undefined
-        },
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 128, 2],
-          expectedButtonEvents: ButtonEvent.SCAN_SUCCESS
-        },
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 3],
-          expectedButtonEvents: ButtonEvent.RECORD
-        },
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 34],
-          expectedButtonEvents: ButtonEvent.EOL_PRIO
-        },
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 66],
-          expectedButtonEvents: ButtonEvent.INS_OVR
-        },
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 130],
-          expectedButtonEvents: ButtonEvent.INSTR
-        },
-      ];
-      const resetButtonInputReport = [128, 0, 0, 0, 0, 0, 0, 0, 2];
-      await checkButtonMapping(
-          state.fakeHidDevice, state.dictationDevice, state.buttonEventListener,
-          testCases, resetButtonInputReport);
-    });
+      it('Buttons', async () => {
+        const testCases: ButtonMappingTestCase[] = [
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 1, 0],
+            expectedButtonEvents: ButtonEvent.SCAN_END
+          },
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 2, 0],
+            expectedButtonEvents: ButtonEvent.F1_A
+          },
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 4, 0],
+            expectedButtonEvents: ButtonEvent.F2_B
+          },
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 8, 0],
+            expectedButtonEvents: ButtonEvent.F3_C
+          },
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 16, 0],
+            expectedButtonEvents: ButtonEvent.F4_D
+          },
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 32, 0],
+            expectedButtonEvents: ButtonEvent.COMMAND
+          },
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 64, 0],
+            expectedButtonEvents: undefined
+          },
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 128, 0],
+            expectedButtonEvents: ButtonEvent.SCAN_SUCCESS
+          },
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 1],
+            expectedButtonEvents: ButtonEvent.RECORD
+          },
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 32],
+            expectedButtonEvents: ButtonEvent.EOL_PRIO
+          },
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 64],
+            expectedButtonEvents: ButtonEvent.INS_OVR
+          },
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 128],
+            expectedButtonEvents: ButtonEvent.INSTR
+          },
+        ];
+        const resetButtonInputReport = [128, 0, 0, 0, 0, 0, 0, 0, 0];
+        await checkButtonMapping(
+            state.fakeHidDevice, state.dictationDevice,
+            state.buttonEventListener, testCases, resetButtonInputReport);
+      });
 
-    it('SpeechMikes_INTSlider_Slider', async () => {
-      await createDictationDeviceForType(DeviceType.SPEECHMIKE_SMP_3710);
+      it('Slider', async () => {
+        const testCases: ButtonMappingTestCase[] = [
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 8],
+            expectedButtonEvents: ButtonEvent.FORWARD
+          },
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 2],
+            expectedButtonEvents: ButtonEvent.STOP
+          },
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 4],
+            expectedButtonEvents: ButtonEvent.PLAY
+          },
+          {
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 16],
+            expectedButtonEvents: ButtonEvent.REWIND
+          },
+        ];
+        const resetInputReport = undefined;  // no reset
+        await checkButtonMapping(
+            state.fakeHidDevice, state.dictationDevice,
+            state.buttonEventListener, testCases, resetInputReport);
+      });
 
-      const testCases: ButtonMappingTestCase[] = [
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 1],
-          expectedButtonEvents: ButtonEvent.RECORD
-        },
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 2],
-          expectedButtonEvents: ButtonEvent.STOP
-        },
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 4],
-          expectedButtonEvents: ButtonEvent.PLAY
-        },
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 16],
-          expectedButtonEvents: ButtonEvent.REWIND
-        },
-      ];
-      await checkSliderMapping(
-          state.fakeHidDevice, state.dictationDevice, state.buttonEventListener,
-          testCases);
-    });
-
-    it('SpeechMikes_PHISlider_Slider', async () => {
-      await createDictationDeviceForType(DeviceType.SPEECHMIKE_LFH_3520);
-
-      const testCases: ButtonMappingTestCase[] = [
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 8],
-          expectedButtonEvents: ButtonEvent.FORWARD
-        },
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 2],
-          expectedButtonEvents: ButtonEvent.STOP
-        },
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 4],
-          expectedButtonEvents: ButtonEvent.PLAY
-        },
-        {
-          inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 16],
-          expectedButtonEvents: ButtonEvent.REWIND
-        },
-      ];
-      await checkSliderMapping(
-          state.fakeHidDevice, state.dictationDevice, state.buttonEventListener,
-          testCases);
+      it('Slider + Button', async () => {
+        const testCases: ButtonMappingTestCase[] = [
+          {
+            // Button: SCAN_END, Slider: PLAY
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 1, 4],
+            expectedButtonEvents: ButtonEvent.SCAN_END
+          },
+          {
+            // Button: None, Slider: PLAY
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 4],
+            expectedButtonEvents: ButtonEvent.NONE
+          },
+          {
+            // Button: None, Slider: STOP
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 0, 2],
+            expectedButtonEvents: ButtonEvent.STOP
+          },
+          {
+            // Button: F1_A, Slider: STOP
+            inputReportData: [128, 0, 0, 0, 0, 0, 0, 2, 2],
+            expectedButtonEvents: ButtonEvent.F1_A
+          },
+        ];
+        const resetInputReport = undefined;  // no reset
+        await checkButtonMapping(
+            state.fakeHidDevice, state.dictationDevice,
+            state.buttonEventListener, testCases, resetInputReport);
+      });
     });
 
     it('PowerMic4', async () => {

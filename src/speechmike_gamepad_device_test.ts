@@ -62,9 +62,10 @@ describe('SpeechMikeGamepadDevice', () => {
         {inputReportData: [0, 64], expectedButtonEvents: ButtonEvent.EOL_PRIO},
         {inputReportData: [0, 128], expectedButtonEvents: undefined},
       ];
+      const resetButtonInputReport = [0, 0];
       await checkButtonMapping(
           state.fakeHidDevice, state.dictationDevice, state.buttonEventListener,
-          testCases);
+          testCases, resetButtonInputReport);
     });
 
     it('PowerMic4', async () => {
@@ -98,9 +99,10 @@ describe('SpeechMikeGamepadDevice', () => {
         {inputReportData: [0, 64], expectedButtonEvents: ButtonEvent.REWIND},
         {inputReportData: [0, 128], expectedButtonEvents: undefined},
       ];
+      const resetButtonInputReport = [0, 0];
       await checkButtonMapping(
           state.fakeHidDevice, state.dictationDevice, state.buttonEventListener,
-          testCases);
+          testCases, resetButtonInputReport);
     });
   });
 });

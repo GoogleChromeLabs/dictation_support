@@ -51,8 +51,9 @@ describe('FootControlDevice', () => {
       {inputReportData: [8], expectedButtonEvents: ButtonEvent.EOL_PRIO},
       {inputReportData: [16], expectedButtonEvents: undefined},
     ];
+    const resetButtonInputReport = [0];
     await checkButtonMapping(
         state.fakeHidDevice, state.dictationDevice, state.buttonEventListener,
-        testCases);
+        testCases, resetButtonInputReport);
   });
 });
