@@ -194,6 +194,10 @@ export class SpeechMikeHidDevice extends DictationDeviceBase {
     await super.init();
     await this.fetchDeviceCode();
     this.determineSliderBitsFilter();
+
+    if (this.proxyDevice !== undefined) {
+      await this.proxyDevice.init();
+    }
   }
 
   override async shutdown() {

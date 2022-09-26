@@ -171,7 +171,6 @@ export class DictationDeviceManager {
     const proxyDevices: SpeechMikeGamepadDevice[] = [];
     const hostDevices: DictationDevice[] = [];
     for (const device of filteredDevices) {
-      if (device === undefined) continue;
       if (device.implType === ImplementationType.SPEECHMIKE_GAMEPAD) {
         proxyDevices.push(device);
       } else {
@@ -181,17 +180,13 @@ export class DictationDeviceManager {
 
     for (const device of hostDevices) {
       this.addListeners(device);
-      this.devices.set(device.hidDevice, device);
     }
 
-    await Promise.all(filteredDevices.map(device => device.init()));
-
-    if (proxyDevices.length === 0) return hostDevices;
     for (const proxyDevice of proxyDevices) {
       // Find matching host and assign
       const proxyHidDevice = proxyDevice.hidDevice;
       let assigned = false;
-      for (const hostDevice of this.devices.values()) {
+      for (const hostDevice of [...this.devices.values(), ...hostDevices]) {
         if (hostDevice.implType !== ImplementationType.SPEECHMIKE_HID) {
           continue;
         }
@@ -209,7 +204,20 @@ export class DictationDeviceManager {
       }
     }
 
-    return hostDevices;
+    const result: DictationDevice[] = [];
+    for (const device of hostDevices) {
+      try {
+        await device.init();
+      } catch (e: unknown) {
+        device.shutdown();
+        console.error('failed to initialize device', e);
+        continue;
+      }
+      this.devices.set(device.hidDevice, device);
+      result.push(device);
+    }
+
+    return result;
   }
 
   protected async createDevice(hidDevice: HIDDevice):

@@ -418,4 +418,28 @@ describe('DictationDeviceManager', () => {
       expect(state.footControlCreateSpy).not.toHaveBeenCalled();
     });
   });
+
+  it('handles devices failing to initialize', async () => {
+    state.powerMic3CreateSpy.and.callFake((hidDevice: HIDDevice) => {
+      state.powerMic3Device = jasmine.createSpyObj<PowerMic3Device>(
+          'powerMic3Device',
+          [
+            'addButtonEventListener',
+            'init',
+            'shutdown',
+          ],
+          {
+            hidDevice,
+            implType: ImplementationType.POWERMIC_3,
+          });
+      state.powerMic3Device.init.and.rejectWith('fail');
+      return state.powerMic3Device;
+    });
+
+    await connectHidDevices(SAMPLE_HID_DEVICES);
+
+    await state.deviceManager.init();
+    const devices = state.deviceManager.getDevices();
+    expect(devices).toEqual([state.footControlDevice]);
+  });
 });
