@@ -30,7 +30,6 @@ TODO: host latest release and link here
 | Philips SpeechOne PSM6000                |                 |
 | Nuance PowerMic III                      |                 |
 | Nuance PowerMic 4                        |                 |
-|                                          |                 |
 
 ###  Supported platforms
 * Google Chrome on Windows, macOS, Linux and Chrome OS (Chromebooks)
