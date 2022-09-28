@@ -3,7 +3,7 @@
 ##  Features
 The SDK provided with this repository allows web-based apps/pages to interact with dictation devices:
 * Events for connected / disconnected devices
-* Events for button presses
+* Events for button presses / slider movements
 * Events for motion events (pickedup and layed down)
 * Commands to set LED states (predefined states or individual LED settings)
 
