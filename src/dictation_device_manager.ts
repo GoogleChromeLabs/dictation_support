@@ -79,6 +79,8 @@ export class DictationDeviceManager {
   protected readonly motionEventListeners = new Set<MotionEventListener>();
 
   protected readonly devices = new Map<HIDDevice, DictationDevice>();
+  protected readonly pendingProxyDevices =
+      new Map<HIDDevice, SpeechMikeGamepadDevice>();
 
   protected readonly onConnectHandler = (event: HIDConnectionEvent) =>
       this.onHidDeviceConnected(event);
@@ -165,57 +167,31 @@ export class DictationDeviceManager {
     const devices = await Promise.all(
         hidDevices.map(hidDevice => this.createDevice(hidDevice)));
 
-    const filteredDevices = devices.filter(isDevice);
-    if (filteredDevices.length === 0) return [];
-
-    const proxyDevices: SpeechMikeGamepadDevice[] = [];
-    const hostDevices: DictationDevice[] = [];
-    for (const device of filteredDevices) {
-      if (device.implType === ImplementationType.SPEECHMIKE_GAMEPAD) {
-        proxyDevices.push(device);
-      } else {
-        hostDevices.push(device);
-      }
-    }
-
-    for (const device of hostDevices) {
-      this.addListeners(device);
-    }
-
-    for (const proxyDevice of proxyDevices) {
-      // Find matching host and assign
-      const proxyHidDevice = proxyDevice.hidDevice;
-      let assigned = false;
-      for (const hostDevice of [...this.devices.values(), ...hostDevices]) {
-        if (hostDevice.implType !== ImplementationType.SPEECHMIKE_HID) {
-          continue;
-        }
-        const hostHidDevice = hostDevice.hidDevice;
-        if (proxyHidDevice.vendorId !== hostHidDevice.vendorId ||
-            proxyHidDevice.productId !== hostHidDevice.productId) {
-          continue;
-        }
-        hostDevice.assignProxyDevice(proxyDevice);
-        assigned = true;
-        break;
-      }
-      if (!assigned) {
-        throw new Error('Could not assign proxy device');
-      }
-    }
-
     const result: DictationDevice[] = [];
-    for (const device of hostDevices) {
+    for (const device of devices) {
+      if (device === undefined) continue;
+
       try {
         await device.init();
       } catch (e: unknown) {
-        device.shutdown();
+        await device.shutdown();
         console.error('failed to initialize device', e);
         continue;
       }
+
+      // Handle proxy device
+      if (device.implType === ImplementationType.SPEECHMIKE_GAMEPAD) {
+        this.pendingProxyDevices.set(device.hidDevice, device);
+        continue;
+      }
+
+      // Handle host device
+      this.addListeners(device);
       this.devices.set(device.hidDevice, device);
       result.push(device);
     }
+
+    this.assignPendingProxyDevices();
 
     return result;
   }
@@ -238,6 +214,25 @@ export class DictationDeviceManager {
         return FootControlDevice.create(hidDevice);
       default:
         checkExhaustive(implType);
+    }
+  }
+
+  protected assignPendingProxyDevices() {
+    for (const [proxyHidDevice, proxyDevice] of this.pendingProxyDevices) {
+      // Find matching host and assign
+      for (const hostDevice of this.devices.values()) {
+        if (hostDevice.implType !== ImplementationType.SPEECHMIKE_HID) {
+          continue;
+        }
+        const hostHidDevice = hostDevice.hidDevice;
+        if (proxyHidDevice.vendorId !== hostHidDevice.vendorId ||
+            proxyHidDevice.productId !== hostHidDevice.productId) {
+          continue;
+        }
+        hostDevice.assignProxyDevice(proxyDevice);
+        this.pendingProxyDevices.delete(proxyHidDevice);
+        break;
+      }
     }
   }
 
@@ -265,6 +260,7 @@ export class DictationDeviceManager {
 
   protected async onHidDeviceDisconnected(event: HIDConnectionEvent) {
     const hidDevice = event.device;
+    this.pendingProxyDevices.delete(hidDevice);
     const device = this.devices.get(hidDevice);
     if (device === undefined) return;
 
@@ -330,9 +326,4 @@ function deviceMatchesFilter(
 
 function checkExhaustive(arg: never): never {
   throw new Error(`Unexpected input: ${arg}`);
-}
-
-function isDevice(device: DictationDevice|
-                  undefined): device is DictationDevice {
-  return device !== undefined;
 }
