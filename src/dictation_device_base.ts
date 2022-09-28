@@ -128,10 +128,10 @@ export abstract class DictationDeviceBase {
       if (inputBitMask & buttonMapping) outputBitMask |= buttonEvent;
     }
 
-    outputBitMask = this.filterOutputBitMask(outputBitMask);
-
     if (outputBitMask === this.lastBitMask) return;
     this.lastBitMask = outputBitMask;
+
+    outputBitMask = this.filterOutputBitMask(outputBitMask);
 
     await Promise.all([...this.buttonEventListeners].map(
         listener => listener(this.getThisAsDictationDevice(), outputBitMask)));
