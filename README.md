@@ -52,7 +52,7 @@ The SDK requires permission to interact with the device using the [WebHID API](h
 You can use `await deviceManager.requestDevice()`, which will prompt the user to select one of the supported devices from a pop-up. Once the user has granted permission, the device will be available, i.e. a new `DictationDevice` will be created. That device will also be available via `deviceManger.getDevices()` when the page reloads. Disconnecting and reconnecting the device will require the user to grant permission again using `deviceManager.requestDevice()`.
 
 #### Admin grants permission
-TODO(Google): surface [WebHidAllowAllDevicesForUrls](https://chromeenterprise.google/policies/#WebHidAllowAllDevicesForUrls) to the admin console
+TODO(Google): surface [WebHidAllowAllDevicesForUrls](https://chromeenterprise.google/policies/#WebHidAllowAllDevicesForUrls) to the admin console (ETA: 2022Q4)
 
 Instead of the user being prompted to grant permissions, the admin can also grant permissions upfront.
 
