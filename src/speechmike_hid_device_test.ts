@@ -25,7 +25,6 @@ describe('SpeechMikeHidDevice', () => {
     state.proxyDicationDevice =
         jasmine.createSpyObj<SpeechMikeGamepadDevice>('proxyDicationDevice', [
           'addButtonEventListener',
-          'init',
           'shutdown',
         ]);
     state.proxyDicationDeviceButtonEventListeners =
@@ -848,10 +847,6 @@ describe('SpeechMikeHidDevice', () => {
   describe('proxy device', () => {
     beforeEach(async () => {
       await createDictationDeviceForType(DeviceType.SPEECHMIKE_SMP_3700);
-    });
-
-    it('propagates init signal to proxy device', async () => {
-      expect(state.proxyDicationDevice.init).toHaveBeenCalled();
     });
 
     it('propagates shutdown signal to proxy device', async () => {
