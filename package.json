@@ -18,6 +18,10 @@
     "/dist/index.js",
     "/dist/index.d.ts"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GoogleChromeLabs/dictation_support.git"
+  },
   "devDependencies": {
     "@types/jasmine": "^4.3.0",
     "@typescript-eslint/eslint-plugin": "^5.35.1",

@@ -52,6 +52,7 @@ import { DictationDevice } from 'dictation_support/dictation_device';
 import { ButtonEvent } from 'dictation_support/dictation_device_base';
 import { DictationDeviceManager } from 'dictation_support/dictation_device_manager';
 
+const manager = new DictationDeviceManager();
 // Your code here
 ```
 
