@@ -40,9 +40,22 @@ If your browser runs remotely (e.g. Citrix Virtual Apps and Desktops, VMware Hor
 
 ##  How to use
 
-###  Code sample
-TODO: npm package
+###  Sample usage
 
+#### NPM package
+[Link to package](https://www.npmjs.com/package/dictation_support)
+
+Run `npm install dictation_support --save-dev` to install the package as dependency and then use as
+
+```
+import { DictationDevice } from 'dictation_support/dictation_device';
+import { ButtonEvent } from 'dictation_support/dictation_device_base';
+import { DictationDeviceManager } from 'dictation_support/dictation_device_manager';
+
+// Your code here
+```
+
+#### Include compiled sdk
 To use the SDK, simply include the compiled `index.js` into your web page/app and create an instance of `DictationSupport.DictationDeviceManager`. See [/example/index.ejs](https://github.com/GoogleChromeLabs/dictation_support/blob/main/example/index.ejs) or the resulting `/dist/index.html` for an example.
 
 ###  WebHID permission / policy
