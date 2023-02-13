@@ -41,9 +41,9 @@ If your browser runs remotely (e.g. Citrix Virtual Apps and Desktops, VMware Hor
 ##  How to use
 
 ###  Code sample
-TODO: provide link to built sdk.js from latest release
+TODO: npm package
 
-To use the SDK, simply include the compiled `sdk.js` into your web page/app and create an instance of `DictationSupport.DictationDeviceManager`. See [/example/index.ejs](https://github.com/GoogleChromeLabs/dictation_support/blob/main/example/index.ejs) or the resulting `/dist/index.html` for an example.
+To use the SDK, simply include the compiled `index.js` into your web page/app and create an instance of `DictationSupport.DictationDeviceManager`. See [/example/index.ejs](https://github.com/GoogleChromeLabs/dictation_support/blob/main/example/index.ejs) or the resulting `/dist/index.html` for an example.
 
 ###  WebHID permission / policy
 The SDK requires permission to interact with the device using the [WebHID API](https://wicg.github.io/webhid/). This can happen two different ways:
@@ -68,7 +68,7 @@ In order to get started developing, run `npm install` to install the required de
 
 ##  Build
 To build the SDK, run `npm run build`, which will create the following set of files
-* `/dist/sdk.js` the SDK you need to include
+* `/dist/index.js` the SDK you need to include
 * `/dist/index.d.ts` Typescript typings for the SDK
 * `/dist/index.html` sample page using the SDK
 
