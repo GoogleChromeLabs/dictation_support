@@ -1,6 +1,6 @@
 {
   "name": "dictation_support",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "SDK to interact with dictation devices",
   "scripts": {
     "build": "rimraf dist && npx webpack --config=webpack.config.js",
@@ -12,10 +12,10 @@
   },
   "author": "hendrich@google.com",
   "license": "Apache-2.0",
-  "main": "dist/sdk.js",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "/dist/sdk.js",
+    "/dist/index.js",
     "/dist/index.d.ts"
   ],
   "devDependencies": {
