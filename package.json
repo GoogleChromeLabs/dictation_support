@@ -1,6 +1,6 @@
 {
   "name": "dictation_support",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "SDK to interact with dictation devices",
   "scripts": {
     "build": "rimraf dist && npx webpack --config=webpack.config.js",
