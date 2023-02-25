@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/no-var-requires */
 /**
  * @license
  * Copyright 2022 Google LLC
@@ -16,17 +18,19 @@
  */
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const NpmDtsPlugin = require('npm-dts-webpack-plugin');
 const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
+const DtsBundlePlugin = require('dts-bundle-webpack');
+const libraryName = 'DictationSupport';
 
 module.exports = {
-  entry : './src/index.ts',
-  output : {
-    path : path.resolve(__dirname, 'dist'),
-    filename : 'index.js',
-    libraryTarget : 'umd',
-    umdNamedDefine : true,
+  entry: './src/index.ts',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'index.js',
+    library: libraryName,
+    libraryTarget: 'umd',
+    umdNamedDefine: true,
   },
   resolve : {extensions : ['.ts']},
   devtool : 'source-map',
@@ -44,15 +48,18 @@ module.exports = {
             },
           ],
   },
-  plugins :
-          [
-            new HtmlWebpackPlugin({
-              template : path.resolve(__dirname, 'example/index.ejs'),
-              inject : 'head',
-            }),
-            new NpmDtsPlugin({
-              output : path.resolve(__dirname, 'dist/index.d.ts'),
-              logLevel : 'warn',
-            }),
-          ],
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, 'example/index.ejs'),
+      inject: 'head',
+    }),
+    new DtsBundlePlugin({
+      name: libraryName,
+      main: 'dist/out-tsc/index.d.ts',
+      out: '../index.d.ts',
+      removeSource: true,
+      outputAsModuleFolder: true, // to use npm in-package typings
+    }),
+  ],
 };
+ 
