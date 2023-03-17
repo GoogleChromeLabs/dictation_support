@@ -47,10 +47,8 @@ If your browser runs remotely (e.g. Citrix Virtual Apps and Desktops, VMware Hor
 
 Run `npm install dictation_support --save-dev` to install the package as dependency and then use as
 
-```
-import { DictationDevice } from 'dictation_support/dictation_device';
-import { ButtonEvent } from 'dictation_support/dictation_device_base';
-import { DictationDeviceManager } from 'dictation_support/dictation_device_manager';
+```typescript
+import { DictationDevice, ButtonEvent, DictationDeviceManager } from 'dictation_support';
 
 const manager = new DictationDeviceManager();
 // Your code here
