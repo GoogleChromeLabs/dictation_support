@@ -28,6 +28,12 @@ const DEVICE_FILTERS: Readonly<
     Record<ImplementationType, ReadonlyArray<HIDDeviceFilter>>> =
     Object.freeze({
       [ImplementationType.SPEECHMIKE_HID]: Object.freeze([
+        // SpeechMike Pro in HID mode
+        Object.freeze(
+            {vendorId: 0x0911, productId: 0x2512, usagePage: 65440, usage: 1}),
+        // SpeechMike II Pro Plus (LFH52xx) in HID mode
+        Object.freeze(
+            {vendorId: 0x0911, productId: 0x149a, usagePage: 65440, usage: 1}),
         // Wired SpeechMikes (LFH35xx, LFH36xx, SMP37xx, SMP38xx) in HID mode
         Object.freeze(
             {vendorId: 0x0911, productId: 0x0c1c, usagePage: 65440, usage: 1}),
