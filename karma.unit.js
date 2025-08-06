@@ -1,20 +1,39 @@
-var webpackConfig = require('./webpack.config');
-
 process.env.CHROME_BIN = require('puppeteer').executablePath();
 
 module.exports = function(config) {
   config.set({
     basePath: '',
-    frameworks: ['jasmine'],
+    frameworks: ['jasmine', 'webpack'],
     files: [
-      'src/**/*_test.ts',
-      'src/test_util/**/*.ts',
+      'src/*_test.ts',
+      'src/test_util/*.ts',
     ],
     exclude: [],
-    preprocessors: {
-      '**/*.ts': ['webpack'],
+    webpack: {
+      mode: 'development',
+      entry: './src/index.ts',
+      output: {
+        filename: 'index.js'
+      },
+      resolve: {
+        extensions: ['.js', '.ts', '.json']
+      },
+      devtool: "inline-source-map",
+      module: {
+        rules: [
+          {
+            test: /\.ts$/,
+            use: [
+              "ts-loader"
+            ]
+          },
+        ],
+      }
     },
-    webpack: webpackConfig,
+    preprocessors: {
+      'src/*_test.ts': ['webpack'],
+      'src/test_util/*.ts': ['webpack'],
+    },
     reporters: ['progress'],
     port: 9876,
     colors: true,

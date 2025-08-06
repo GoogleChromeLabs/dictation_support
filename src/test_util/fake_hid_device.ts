@@ -4,7 +4,7 @@ type SendReportReceiver = (reportId: number, data: BufferSource) => void;
 
 export class FakeHidDevice implements HIDDevice {
   /* eslint-disable  @typescript-eslint/no-explicit-any */
-  oninputreport: ((this: HIDDevice, ev: HIDInputReportEvent) => any)|null;
+  oninputreport: ((this: this, ev: HIDInputReportEvent) => any)|null = null;
   opened = false;
   readonly vendorId: number;
   readonly productId: number;
@@ -67,11 +67,25 @@ export class FakeHidDevice implements HIDDevice {
   dispatchEvent(_event: Event): boolean {
     throw new Error('Not implemented');
   }
-
+  addEventListener(
+      type: 'inputreport',
+      listener: (this: this, ev: HIDInputReportEvent) => any): void;
+  addEventListener(
+      type: string,
+      listener: EventListenerOrEventListenerObject|any,
+      options?: boolean|AddEventListenerOptions,
+      ): void;
   addEventListener(type: string, listener: InputReportListener) {
     if (type === 'inputreport') this.inputReportListeners.add(listener);
   }
-
+  removeEventListener(
+      type: 'inputreport',
+      callback: (this: this, ev: HIDInputReportEvent) => any): void;
+  removeEventListener(
+      type: string,
+      callback: EventListenerOrEventListenerObject|any,
+      options?: EventListenerOptions|boolean,
+      ): void;
   removeEventListener(type: string, listener: InputReportListener) {
     if (type === 'inputreport') this.inputReportListeners.delete(listener);
   }

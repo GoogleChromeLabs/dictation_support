@@ -122,7 +122,7 @@ describe('DictationDeviceManager', () => {
       return state.speechMikeGamepadDevice;
     });
 
-    state.deviceManager = new DictationDeviceManager(state.fakeHidApi);
+    state.deviceManager = new DictationDeviceManager(state.fakeHidApi as HID);
     state.deviceManager.addButtonEventListener(state.buttonEventListener);
     state.deviceManager.addMotionEventListener(state.motionEventListener);
   });

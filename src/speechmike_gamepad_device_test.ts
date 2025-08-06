@@ -18,7 +18,8 @@ describe('SpeechMikeGamepadDevice', () => {
   async function createDictationDevice(
       properties: {vendorId: number, productId: number}) {
     state.fakeHidDevice = new FakeHidDevice(properties);
-    state.dictationDevice = SpeechMikeGamepadDevice.create(state.fakeHidDevice);
+    state.dictationDevice =
+        SpeechMikeGamepadDevice.create(state.fakeHidDevice as HIDDevice);
     state.dictationDevice.addButtonEventListener(state.buttonEventListener);
     await state.dictationDevice.init();
   }

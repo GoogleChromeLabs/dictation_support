@@ -19,7 +19,7 @@ export class FakeHidApi implements HID {
   protected readonly pendingDevices = new Set<FakeHidDevice>();
 
   getDevices(): Promise<HIDDevice[]> {
-    return Promise.resolve(Array.from(this.devices));
+    return Promise.resolve(Array.from(this.devices as unknown as HIDDevice[]));
   }
 
   requestDevice(_options?: HIDDeviceRequestOptions): Promise<HIDDevice[]> {
@@ -31,24 +31,53 @@ export class FakeHidApi implements HID {
       result.push(pendingDevice);
     }
     this.pendingDevices.clear();
-    return Promise.resolve(result);
+    return Promise.resolve(result as HIDDevice[]);
   }
-
+  addEventListener(
+      type: 'connect'|'disconnect',
+      listener: (this: this, ev: HIDConnectionEvent) => any,
+      options?: boolean,
+      ): void;
+  addEventListener(
+      type?: string,
+      listener?: EventListenerOrEventListenerObject|null|
+      ((this: this, ev: HIDConnectionEvent) => any),
+      options?: boolean|AddEventListenerOptions,
+      ): void;
   addEventListener(
       type: 'connect'|'disconnect', listener: DeviceEventListener) {
     if (type === 'connect') {
-      this.connectListeners.add(listener);
+      this.connectListeners.add(
+          listener as ((this: this, ev: HIDConnectionEvent) => any));
     } else {
-      this.disconnectListeners.add(listener);
+      this.disconnectListeners.add(
+          listener as ((this: this, ev: HIDConnectionEvent) => any));
     }
   }
 
   removeEventListener(
-      type: 'connect'|'disconnect', listener: DeviceEventListener) {
+      type: 'connect'|'disconnect',
+      callback: (this: this, ev: HIDConnectionEvent) => any,
+      useCapture?: boolean,
+      ): void;
+  removeEventListener(
+      type: string,
+      callback: EventListenerOrEventListenerObject|null|
+      ((this: this, ev: HIDConnectionEvent) => any),
+      options?: EventListenerOptions|boolean,
+      ): void;
+  removeEventListener(
+      type: 'connect'|'disconnect', listener: DeviceEventListener,
+      options?: boolean|EventListenerOptions) {
+    if (options === undefined) {
+      // dummy
+    }
     if (type === 'connect') {
-      this.connectListeners.delete(listener);
+      this.connectListeners.delete(
+          listener as ((this: this, ev: HIDConnectionEvent) => any));
     } else {
-      this.disconnectListeners.delete(listener);
+      this.disconnectListeners.delete(
+          listener as ((this: this, ev: HIDConnectionEvent) => any));
     }
   }
 

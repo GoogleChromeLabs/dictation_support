@@ -45,7 +45,8 @@ describe('DictationDeviceBase', () => {
     state.buttonEventListener = jasmine.createSpy('buttonEventListener');
 
     state.fakeHidDevice = new FakeHidDevice({productId: 123, vendorId: 456});
-    state.dictationDevice = TestDictationDevice.create(state.fakeHidDevice);
+    state.dictationDevice =
+        TestDictationDevice.create(state.fakeHidDevice as HIDDevice);
     state.dictationDevice.addButtonEventListener(state.buttonEventListener);
   });
 

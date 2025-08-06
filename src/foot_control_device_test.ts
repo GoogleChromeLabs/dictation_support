@@ -17,7 +17,8 @@ describe('FootControlDevice', () => {
 
   async function createDictationDevice(productId: number) {
     state.fakeHidDevice = new FakeHidDevice({productId, vendorId: 0x0911});
-    state.dictationDevice = FootControlDevice.create(state.fakeHidDevice);
+    state.dictationDevice =
+        FootControlDevice.create(state.fakeHidDevice as HIDDevice);
     state.dictationDevice.addButtonEventListener(state.buttonEventListener);
     await state.dictationDevice.init();
   }

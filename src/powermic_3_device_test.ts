@@ -21,7 +21,8 @@ describe('PowerMic3Device', () => {
       vendorId: 0x0554,
       sendReportReceiver: state.sendReportReceiver
     });
-    state.dictationDevice = PowerMic3Device.create(state.fakeHidDevice);
+    state.dictationDevice =
+        PowerMic3Device.create(state.fakeHidDevice as HIDDevice);
     state.dictationDevice.addButtonEventListener(state.buttonEventListener);
     await state.dictationDevice.init();
   });

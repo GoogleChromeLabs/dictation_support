@@ -39,7 +39,8 @@ describe('SpeechMikeHidDevice', () => {
       properties: {vendorId: number, productId: number}) {
     state.fakeHidDevice = new FakeHidDevice(
         {...properties, sendReportReceiver: state.sendReportReceiver});
-    state.dictationDevice = SpeechMikeHidDevice.create(state.fakeHidDevice);
+    state.dictationDevice =
+        SpeechMikeHidDevice.create(state.fakeHidDevice as HIDDevice);
     state.dictationDevice.addButtonEventListener(state.buttonEventListener);
     state.dictationDevice.addMotionEventListener(state.motionEventListener);
     state.dictationDevice.assignProxyDevice(state.proxyDicationDevice);
