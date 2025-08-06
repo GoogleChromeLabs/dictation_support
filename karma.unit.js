@@ -12,21 +12,12 @@ module.exports = function(config) {
     webpack: {
       mode: 'development',
       entry: './src/index.ts',
-      output: {
-        filename: 'index.js'
-      },
-      resolve: {
-        extensions: ['.js', '.ts', '.json']
-      },
-      devtool: "inline-source-map",
+      output: {filename: 'index.js'},
+      resolve: {extensions: ['.js', '.ts', '.json']},
+      devtool: 'inline-source-map',
       module: {
         rules: [
-          {
-            test: /\.ts$/,
-            use: [
-              "ts-loader"
-            ]
-          },
+          {test: /\.ts$/, use: ['ts-loader']},
         ],
       }
     },
