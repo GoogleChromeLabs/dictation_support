@@ -28,6 +28,7 @@ TODO: host latest release and link here
 | Philips SpeechMike Premium Air SMP4000   |                 |
 | Philips SpeechMike Premium Air SMP4010   |                 |
 | Philips SpeechOne PSM6000                |                 |
+| Philips SpeechMike Ambient PSM5000       |                 |
 | Nuance PowerMic III                      |                 |
 | Nuance PowerMic 4                        |                 |
 

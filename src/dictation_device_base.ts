@@ -48,6 +48,7 @@ export enum DeviceType {
   SPEECHONE_PSM_6000 = 6001,
   POWERMIC_3 = 4097,
   POWERMIC_4 = 100,
+  SPEECHMIKE_AMBIENT_PSM5000 = 5000,
 }
 
 export enum ButtonEvent {
