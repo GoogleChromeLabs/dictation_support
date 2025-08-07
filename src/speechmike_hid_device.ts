@@ -77,6 +77,7 @@ enum Command {
   GET_EVENT_MODE = 0x8d,
   WIRELESS_STATUS_EVENT = 0x94,
   MOTION_EVENT = 0x9e,
+  GET_FIRMWARE_VERSION = 0x91,
 }
 
 const COMMAND_TIMEOUT_MS = 5000;
@@ -314,6 +315,26 @@ export class SpeechMikeHidDevice extends DictationDeviceBase {
         const smpCode = response.getUint16(6);
 
         this.deviceCode = Math.max(smpCode, smptCode, smpaCode);
+
+        // if the device is SpeechMike Premium Air, then check for the Ambient
+        if ([
+              DeviceType.SPEECHMIKE_SMP_4000, DeviceType.SPEECHMIKE_SMP_4010
+            ].includes(this.deviceCode)) {
+          // first check the main firmware version, it will be 6 or higher for
+          // Ambient
+          response = await this.sendCommandAndWaitForResponse(
+              Command.GET_FIRMWARE_VERSION);
+          if (response.getUint8(5) === 6) {
+            // we can now get the Ambient device code
+            response = await this.sendCommandAndWaitForResponse(
+                Command.GET_DEVICE_CODE_SO);
+            const SMAmbientDeviceCode = response.getUint16(5);
+            if (SMAmbientDeviceCode !== 0) {
+              // use the SpeechMike Ambient device code
+              this.deviceCode = SMAmbientDeviceCode;
+            }
+          }
+        }
       }
     } else {
       response =
