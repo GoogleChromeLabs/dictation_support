@@ -166,6 +166,8 @@ describe('SpeechMikeHidDevice', () => {
         prepareResponse(
             [139],
             [139, 0, 15, 160, 14, 116, 13, 172, 0]);  // GET_DEVICE_CODE_SMP
+        prepareResponse(
+            [145], [145, 0, 0, 65, 65, 4, 46, 0, 65])  // GET_FIRMWARE_VERSION
         break;
       }
       case DeviceType.SPEECHMIKE_SMP_4010: {
@@ -174,6 +176,8 @@ describe('SpeechMikeHidDevice', () => {
         prepareResponse(
             [139],
             [139, 0, 15, 170, 14, 126, 13, 182, 0]);  // GET_DEVICE_CODE_SMP
+        prepareResponse(
+            [145], [145, 0, 0, 65, 65, 4, 46, 0, 65])  // GET_FIRMWARE_VERSION
         break;
       }
       case DeviceType.SPEECHONE_PSM_6000: {
@@ -191,6 +195,18 @@ describe('SpeechMikeHidDevice', () => {
         prepareResponse([131], [131, 0, 0, 0, 1, 0, 50, 1, 149]);  // IS_PREMIUM
         prepareResponse(
             [139], [139, 0, 0, 0, 14, 116, 13, 172, 0]);  // GET_DEVICE_CODE_SMP
+        break;
+      }
+      case DeviceType.SPEECHMIKE_AMBIENT_PSM5000: {
+        await createDictationDevice({vendorId: 0x0911, productId: 0x0c1e});
+        prepareResponse([131], [131, 0, 0, 0, 1, 0, 50, 1, 149]);  // IS_PREMIUM
+        prepareResponse(
+            [139],
+            [139, 0, 15, 160, 14, 116, 13, 172, 0]);  // GET_DEVICE_CODE_SMP
+        prepareResponse(
+            [145], [145, 0, 0, 5, 7, 6, 46, 0, 7])  // GET_FIRMWARE_VERSION
+        prepareResponse(
+            [150], [150, 0, 0, 0, 0, 19, 136, 0, 0]);  // GET_DEVICE_CODE_SO
         break;
       }
       default: {
@@ -211,7 +227,7 @@ describe('SpeechMikeHidDevice', () => {
       DeviceType.SPEECHMIKE_SMP_3720, DeviceType.SPEECHMIKE_SMP_3800,
       DeviceType.SPEECHMIKE_SMP_3810, DeviceType.SPEECHMIKE_SMP_4000,
       DeviceType.SPEECHMIKE_SMP_4010, DeviceType.SPEECHONE_PSM_6000,
-      DeviceType.POWERMIC_4,
+      DeviceType.POWERMIC_4,          DeviceType.SPEECHMIKE_AMBIENT_PSM5000,
     ];
 
     for (const deviceType of testCases) {

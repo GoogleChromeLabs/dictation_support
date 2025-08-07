@@ -34,7 +34,8 @@ const DEVICE_FILTERS: Readonly<
         // SpeechMike Premium Air (SMP40xx) in HID mode
         Object.freeze(
             {vendorId: 0x0911, productId: 0x0c1d, usagePage: 65440, usage: 1}),
-        // SpeechOne (PSM6000) in HID or Browser/Gamepad mode
+        // SpeechOne (PSM6000) or SpeechMike Ambient (PSM5000) in HID or
+        // Browser/Gamepad mode
         Object.freeze(
             {vendorId: 0x0911, productId: 0x0c1e, usagePage: 65440, usage: 1}),
         // All SpeechMikes in Browser/Gamepad mode
@@ -48,7 +49,8 @@ const DEVICE_FILTERS: Readonly<
         // All SpeechMikes in Browser/Gamepad mode
         Object.freeze(
             {vendorId: 0x0911, productId: 0x0fa0, usagePage: 1, usage: 4}),
-        // SpeechOne (PSM6000) in Browser/Gamepad mode
+        // SpeechOne (PSM6000) or SpeechMike Ambient (PSM5000) in
+        // Browser/Gamepad mode
         Object.freeze(
             {vendorId: 0x0911, productId: 0x0c1e, usagePage: 1, usage: 4}),
         // PowerMic IV in Browser/Gamepad mode
