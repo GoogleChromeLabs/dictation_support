@@ -167,6 +167,8 @@ describe('SpeechMikeHidDevice', () => {
         prepareResponse(
             [139],
             [139, 0, 15, 160, 14, 116, 13, 172, 0]);  // GET_DEVICE_CODE_SMP
+        prepareResponse(
+            [145], [145, 0, 0, 65, 65, 4, 46, 0, 65])  // GET_FIRMWARE_VERSION
         break;
       }
       case DeviceType.SPEECHMIKE_SMP_4010: {
@@ -175,6 +177,8 @@ describe('SpeechMikeHidDevice', () => {
         prepareResponse(
             [139],
             [139, 0, 15, 170, 14, 126, 13, 182, 0]);  // GET_DEVICE_CODE_SMP
+        prepareResponse(
+            [145], [145, 0, 0, 65, 65, 4, 46, 0, 65])  // GET_FIRMWARE_VERSION
         break;
       }
       case DeviceType.SPEECHONE_PSM_6000: {
