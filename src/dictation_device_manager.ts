@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 
+import {SonicMic3Device} from './dicta_sonicMic_3_device';
 import {DictationDevice} from './dictation_device';
 import {ButtonEventListener, ImplementationType} from './dictation_device_base';
 import {FootControlDevice} from './foot_control_device';
@@ -69,6 +70,11 @@ const DEVICE_FILTERS: Readonly<
         // PowerMic III
         Object.freeze(
             {vendorId: 0x0554, productId: 0x1001, usagePage: 1, usage: 0}),
+      ]),
+      [ImplementationType.SONICMIC_3]: Object.freeze([
+        // PowerMic III
+        Object.freeze(
+            {vendorId: 0x15D8, productId: 0x002A, usagePage: 65280, usage: 1}),
       ]),
     });
 
@@ -214,6 +220,8 @@ export class DictationDeviceManager {
         return SpeechMikeGamepadDevice.create(hidDevice);
       case ImplementationType.FOOT_CONTROL:
         return FootControlDevice.create(hidDevice);
+      case ImplementationType.SONICMIC_3:
+        return SonicMic3Device.create(hidDevice);
       default:
         checkExhaustive(implType);
     }

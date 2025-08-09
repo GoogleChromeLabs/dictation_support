@@ -7,7 +7,7 @@
     "lint": "eslint --ignore-path .gitignore --ext .ts .",
     "format": "git clang-format",
     "formatCheck": "git clang-format --diff",
-    "prepare": "husky install",
+    "prepare": "npm run build",
     "test": "karma start karma.unit.js"
   },
   "author": "hendrich@google.com",
@@ -35,7 +35,6 @@
     "eslint-plugin-n": "^15.2.5",
     "eslint-plugin-promise": "^6.0.1",
     "html-webpack-plugin": "^5.5.0",
-    "husky": "^8.0.1",
     "jasmine": "^4.3.0",
     "karma": "^6.4.0",
     "karma-chrome-launcher": "^3.1.1",
