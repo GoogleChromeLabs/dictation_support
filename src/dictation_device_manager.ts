@@ -72,7 +72,7 @@ const DEVICE_FILTERS: Readonly<
             {vendorId: 0x0554, productId: 0x1001, usagePage: 1, usage: 0}),
       ]),
       [ImplementationType.SONICMIC_3]: Object.freeze([
-        // PowerMic III
+        // SonicMic III
         Object.freeze(
             {vendorId: 0x15D8, productId: 0x002A, usagePage: 65280, usage: 1}),
       ]),
