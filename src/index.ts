@@ -21,3 +21,4 @@ export * from './foot_control_device';
 export * from './powermic_3_device';
 export * from './speechmike_gamepad_device';
 export * from './speechmike_hid_device';
+export * from './dicta_sonicMic_3_device';

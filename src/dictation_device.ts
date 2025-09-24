@@ -15,10 +15,11 @@
  * limitations under the License.
  */
 
+import {SonicMic3Device} from './dicta_sonicMic_3_device';
 import {FootControlDevice} from './foot_control_device';
 import {PowerMic3Device} from './powermic_3_device';
 import {SpeechMikeGamepadDevice} from './speechmike_gamepad_device';
 import {SpeechMikeHidDevice} from './speechmike_hid_device';
 
 export type DictationDevice =|SpeechMikeHidDevice|SpeechMikeGamepadDevice|
-    PowerMic3Device|FootControlDevice;
+    PowerMic3Device|FootControlDevice|SonicMic3Device;
