@@ -65,11 +65,9 @@ The SDK requires permission to interact with the device using the [WebHID API](h
 You can use `await deviceManager.requestDevice()`, which will prompt the user to select one of the supported devices from a pop-up. Once the user has granted permission, the device will be available, i.e. a new `DictationDevice` will be created. That device will also be available via `deviceManger.getDevices()` when the page reloads. Disconnecting and reconnecting the device will require the user to grant permission again using `deviceManager.requestDevice()`.
 
 #### Admin grants permission
-TODO(Google): surface [WebHidAllowAllDevicesForUrls](https://chromeenterprise.google/policies/#WebHidAllowAllDevicesForUrls) to the admin console (ETA: 2022Q4)
+Instead of the user being prompted to grant permissions, the admin can also grant permissions upfront using the [WebHidAllowDevicesForUrls](https://chromeenterprise.google/policies/#WebHidAllowDevicesForUrls) policy on the Google admin console.
 
-Instead of the user being prompted to grant permissions, the admin can also grant permissions upfront.
-
-On the [Google admin console](https://admin.google.com), navigate to the user or managed guest session policy page and search for `WebHidAllowAllDevicesForUrls`. With this setting, you can allowlist certain devices (vendor ID & product ID)  to the URLs you want to use the SDK on.
+On the [Google admin console](https://admin.google.com), navigate to the user or managed guest session policy page and search for `WebHidAllowDevicesForUrls`. With this setting, you can allowlist certain devices (vendor ID & product ID)  to the URLs you want to use the SDK on.
 Note: The Philips SpeechMikes have different product IDs depending on the event mode (HID vs browser/gamepad mode), see [/src/device_manager.ts](https://github.com/GoogleChromeLabs/dictation_support/blob/main/src/dictation_device_manager.ts) for a list of supported product and vendor IDs (in hex format) in various modes. The product and vendor ID for the policy have to be provided in decimal representation.
 
 If the device is granted permission via policy, the device will be available to the SDK immediately when it is connected (also firing an event).
