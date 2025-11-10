@@ -66,7 +66,7 @@ export enum MotionEvent {
 export type MotionEventListener =
     (device: DictationDevice, event: MotionEvent) => void|Promise<void>;
 
-enum Command {
+export enum Command {
   SET_LED = 0x02,
   SET_EVENT_MODE = 0x0d,
   BUTTON_PRESS_EVENT = 0x80,
