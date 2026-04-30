@@ -261,14 +261,17 @@ export class SpeechMikeHidDevice extends DictationDeviceBase {
     }
     this.proxyDevice = proxyDevice;
     this.proxyDevice.addButtonEventListener(
-        (_device: DictationDevice, bitMask: ButtonEvent) =>
-            this.onProxyButtonEvent(bitMask));
+        (_device: DictationDevice, bitMask: ButtonEvent,
+         eventTimeStamp: number) =>
+            this.onProxyButtonEvent(bitMask, eventTimeStamp));
   }
 
   // See comment in DictationDeviceManager
-  protected async onProxyButtonEvent(bitMask: ButtonEvent) {
+  protected async onProxyButtonEvent(
+      bitMask: ButtonEvent, eventTimeStamp: number) {
     await Promise.all([...this.buttonEventListeners].map(
-        listener => listener(this.getThisAsDictationDevice(), bitMask)));
+        listener => listener(
+            this.getThisAsDictationDevice(), bitMask, eventTimeStamp)));
   }
 
   protected async handleCommandResponse(command: Command, data: DataView) {
@@ -360,7 +363,7 @@ export class SpeechMikeHidDevice extends DictationDeviceBase {
     const command = data.getUint8(0);
 
     if (command === Command.BUTTON_PRESS_EVENT) {
-      await this.handleButtonPress(data);
+      await this.handleButtonPress(data, event.timeStamp);
     } else if (command === Command.MOTION_EVENT) {
       await this.handleMotionEvent(data);
     } else if (command === Command.WIRELESS_STATUS_EVENT) {

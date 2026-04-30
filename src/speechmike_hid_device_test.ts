@@ -873,11 +873,14 @@ describe('SpeechMikeHidDevice', () => {
 
     it('propagates button press events from proxy device', async () => {
       const button = ButtonEvent.RECORD;
+      const eventTimeStamp = 1234;
       expect(state.buttonEventListener).not.toHaveBeenCalled();
       await Promise.all([...state.proxyDicationDeviceButtonEventListeners].map(
-          listener => listener(state.proxyDicationDevice, button)));
+          listener =>
+              listener(state.proxyDicationDevice, button, eventTimeStamp)));
       expect(state.buttonEventListener)
-          .toHaveBeenCalledOnceWith(state.dictationDevice, button);
+          .toHaveBeenCalledOnceWith(
+              state.dictationDevice, button, eventTimeStamp);
     });
   });
 });

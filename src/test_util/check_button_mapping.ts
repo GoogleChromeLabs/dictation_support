@@ -33,7 +33,8 @@ export async function checkButtonMapping(
       expect(buttonEventListener)
           .withContext(contextMessageButtonPress)
           .toHaveBeenCalledOnceWith(
-              expectedDicationDevice, testCase.expectedButtonEvents);
+              expectedDicationDevice, testCase.expectedButtonEvents,
+              jasmine.any(Number));
     }
     else {
       expect(buttonEventListener)
@@ -51,7 +52,8 @@ export async function checkButtonMapping(
     if (testCase.expectedButtonEvents !== undefined) {
       expect(buttonEventListener)
           .withContext(contextMessageButtonRelease)
-          .toHaveBeenCalledOnceWith(expectedDicationDevice, ButtonEvent.NONE);
+          .toHaveBeenCalledOnceWith(
+              expectedDicationDevice, ButtonEvent.NONE, jasmine.any(Number));
     }
     else {
       expect(buttonEventListener)

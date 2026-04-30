@@ -1,7 +1,7 @@
 {
-  "name": "dictation_support",
-  "version": "1.0.5",
-  "description": "SDK to interact with dictation devices",
+  "name": "@mouadennasri/dictation_support",
+  "version": "1.1.0",
+  "description": "SDK to interact with dictation devices (RADPAIR fork — forwards HIDInputReportEvent.timeStamp to button listeners)",
   "scripts": {
     "build": "rimraf dist && npx webpack --config=webpack.config.js",
     "lint": "eslint --ignore-path .gitignore --ext .ts .",
@@ -18,9 +18,12 @@
     "/dist/index.js",
     "/dist/index.d.ts"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/GoogleChromeLabs/dictation_support.git"
+    "url": "https://github.com/mouadennasri/dictation_support.git"
   },
   "devDependencies": {
     "@types/jasmine": "^4.3.0",

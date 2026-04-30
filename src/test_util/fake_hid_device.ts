@@ -76,10 +76,10 @@ export class FakeHidDevice implements HIDDevice {
     if (type === 'inputreport') this.inputReportListeners.delete(listener);
   }
 
-  async handleInputReport(data: number[]) {
+  async handleInputReport(data: number[], timeStamp = 0) {
     const dataView = new DataView(new Uint8Array(data).buffer);
-    const event: HIDInputReportEvent = {data: dataView} as unknown as
-        HIDInputReportEvent;
+    const event: HIDInputReportEvent =
+        {data: dataView, timeStamp} as unknown as HIDInputReportEvent;
     await Promise.all(
         [...this.inputReportListeners].map(listener => listener(event)));
   }

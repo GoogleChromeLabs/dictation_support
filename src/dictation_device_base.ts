@@ -77,7 +77,8 @@ export enum ButtonEvent {
 }
 
 export type ButtonEventListener =
-    (device: DictationDevice, bitMask: ButtonEvent) => void|Promise<void>;
+    (device: DictationDevice, bitMask: ButtonEvent,
+     eventTimeStamp: number) => void|Promise<void>;
 
 export abstract class DictationDeviceBase {
   private static next_id = 0;
@@ -117,11 +118,10 @@ export abstract class DictationDeviceBase {
   }
 
   protected async onInputReport(event: HIDInputReportEvent) {
-    const data = event.data;
-    await this.handleButtonPress(data);
+    await this.handleButtonPress(event.data, event.timeStamp);
   }
 
-  protected async handleButtonPress(data: DataView) {
+  protected async handleButtonPress(data: DataView, eventTimeStamp: number) {
     const buttonMappings = this.getButtonMappings();
     const inputBitMask = this.getInputBitmask(data);
     let outputBitMask = 0;
@@ -135,7 +135,8 @@ export abstract class DictationDeviceBase {
     outputBitMask = this.filterOutputBitMask(outputBitMask);
 
     await Promise.all([...this.buttonEventListeners].map(
-        listener => listener(this.getThisAsDictationDevice(), outputBitMask)));
+        listener => listener(
+            this.getThisAsDictationDevice(), outputBitMask, eventTimeStamp)));
   }
 
   protected filterOutputBitMask(outputBitMask: number): number {
