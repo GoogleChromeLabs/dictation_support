@@ -369,7 +369,10 @@ export class SpeechMikeHidDevice extends DictationDeviceBase {
     } else if (this.commandResolvers.get(command) !== undefined) {
       await this.handleCommandResponse(command, data);
     } else {
-      throw new Error(`Unhandled input report from command ${command}`);
+      // Ignore extra status messages and slow replies from the device
+      // (common on wireless devices like the SpeechMike Ambient PSM5000,
+      // e.g. on device power off/on or machine lock/unlock).
+      console.debug(`Ignoring unhandled input report from command ${command}`);
     }
   }
 

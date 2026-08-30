@@ -474,6 +474,22 @@ describe('SpeechMikeHidDevice', () => {
             state.dictationDevice, MotionEvent.LAYED_DOWN);
   });
 
+  it('ignores unrecognized input reports without throwing', async () => {
+    await createDictationDeviceForType(DeviceType.SPEECHMIKE_SMP_3700);
+
+    // Wireless SpeechMikes (e.g. Ambient PSM5000) emit unsolicited
+    // status/handshake reports, and may deliver command replies after their
+    // resolver has timed out. Command 134 (0x86) matches neither a button,
+    // motion nor wireless-status event, and has no pending resolver, so it must
+    // be ignored rather than throwing.
+    await expectAsync(
+        state.fakeHidDevice.handleInputReport([134, 0, 0, 0, 0, 0, 0, 0, 0]))
+        .toBeResolved();
+
+    expect(state.buttonEventListener).not.toHaveBeenCalled();
+    expect(state.motionEventListener).not.toHaveBeenCalled();
+  });
+
   describe('handles input reports', () => {
     it('SpeechMikes_Pro', async () => {
       await createDictationDeviceForType(DeviceType.SPEECHMIKE_SMP_3700);
