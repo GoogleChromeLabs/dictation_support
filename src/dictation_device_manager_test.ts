@@ -3,6 +3,7 @@ import {ImplementationType} from './dictation_device_base';
 import {DictationDeviceManager} from './dictation_device_manager';
 import {FootControlDevice} from './foot_control_device';
 import {PowerMic3Device} from './powermic_3_device';
+import {RM4010NDevice} from './rm_4010n_device';
 import {SpeechMikeGamepadDevice} from './speechmike_gamepad_device';
 import {SpeechMikeHidDevice} from './speechmike_hid_device';
 import {cleanState} from './test_util/clean_state';
@@ -15,7 +16,8 @@ type DeviceCreationTestCase = {
   expectedPowerMic3HidDeviceIndex?: number,
   expectedFootControlHidDeviceIndex?: number,
   expectedSpeechMikeHidHidDeviceIndex?: number,
-  expectedSpeechMikeGamepadHidDeviceIndex?: number
+  expectedSpeechMikeGamepadHidDeviceIndex?: number,
+  expectedRm4010nHidDeviceIndex?: number,
 };
 
 const SAMPLE_HID_DEVICES: FakeHidDevice[] = [
@@ -47,6 +49,8 @@ describe('DictationDeviceManager', () => {
     speechMikeHidCreateSpy: jasmine.Spy,
     speechMikeGamepadDevice: jasmine.SpyObj<SpeechMikeGamepadDevice>,
     speechMikeGamepadCreateSpy: jasmine.Spy,
+    rm4010nDevice: jasmine.SpyObj<RM4010NDevice>,
+    rm4010nCreateSpy: jasmine.Spy,
   }>();
 
   beforeEach(() => {
@@ -122,6 +126,23 @@ describe('DictationDeviceManager', () => {
       return state.speechMikeGamepadDevice;
     });
 
+    state.rm4010nCreateSpy = spyOn(RM4010NDevice, 'create');
+    state.rm4010nCreateSpy.and.callFake((hidDevice: HIDDevice) => {
+      state.rm4010nDevice = jasmine.createSpyObj<RM4010NDevice>(
+          'rm4010nDevice',
+          [
+            'addButtonEventListener',
+            'addMotionEventListener',
+            'init',
+            'shutdown',
+          ],
+          {
+            hidDevice,
+            implType: ImplementationType.RM_4010N,
+          });
+      return state.rm4010nDevice;
+    });
+
     state.deviceManager = new DictationDeviceManager(state.fakeHidApi);
     state.deviceManager.addButtonEventListener(state.buttonEventListener);
     state.deviceManager.addMotionEventListener(state.motionEventListener);
@@ -170,6 +191,13 @@ describe('DictationDeviceManager', () => {
       // SpeechMikeGamePadDicationDevices only show up as proxy within
       // SpeechMikeHidDictationDevices.
     }
+    if (testCase.expectedRm4010nHidDeviceIndex !== undefined) {
+      const expectedRm4010nHidDevice =
+          testCase.hidDevices[testCase.expectedRm4010nHidDeviceIndex];
+      expect(RM4010NDevice.create)
+          .toHaveBeenCalledOnceWith(expectedRm4010nHidDevice);
+      expectedDevices.push(state.rm4010nDevice);
+    }
 
     expect(devices).toEqual(expectedDevices);
 
@@ -179,6 +207,10 @@ describe('DictationDeviceManager', () => {
           .toHaveBeenCalledOnceWith(state.buttonEventListener);
       if (device.implType === ImplementationType.SPEECHMIKE_HID) {
         expect(state.speechMikeHidDevice.addMotionEventListener)
+            .toHaveBeenCalledOnceWith(state.motionEventListener);
+      }
+      if (device.implType === ImplementationType.RM_4010N) {
+        expect(state.rm4010nDevice.addMotionEventListener)
             .toHaveBeenCalledOnceWith(state.motionEventListener);
       }
     }
@@ -291,6 +323,16 @@ describe('DictationDeviceManager', () => {
         ],
         expectedSpeechMikeHidHidDeviceIndex: 0,
         expectedSpeechMikeGamepadHidDeviceIndex: 1,
+      },
+      {
+        name: 'OM RM-4010N',
+        hidDevices: [
+          new FakeHidDevice({
+            vendorId: 0x33a2,
+            productId: 0x0297,
+          }),
+        ],
+        expectedRm4010nHidDeviceIndex: 0,
       }
     ];
 
@@ -346,7 +388,8 @@ describe('DictationDeviceManager', () => {
           {vendorId: 1364, productId: 100, usagePage: 1, usage: 4},
           {vendorId: 2321, productId: 6212, usagePage: 1, usage: 4},
           {vendorId: 2321, productId: 2330, usagePage: 1, usage: 4},
-          {vendorId: 1364, productId: 4097, usagePage: 1, usage: 0}
+          {vendorId: 1364, productId: 4097, usagePage: 1, usage: 0},
+          {vendorId: 13218, productId: 663}
         ]
       });
     });

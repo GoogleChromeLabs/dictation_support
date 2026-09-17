@@ -22,6 +22,7 @@ export enum ImplementationType {
   SPEECHMIKE_GAMEPAD = 1,
   FOOT_CONTROL = 2,
   POWERMIC_3 = 3,
+  RM_4010N = 4,
 }
 
 export enum DeviceType {
@@ -49,6 +50,7 @@ export enum DeviceType {
   POWERMIC_3 = 4097,
   POWERMIC_4 = 100,
   SPEECHMIKE_AMBIENT_PSM5000 = 5000,
+  RM_4010N = 40100,
 }
 
 export enum ButtonEvent {
@@ -74,6 +76,9 @@ export enum ButtonEvent {
   ENTER_SELECT = 1 << 20,
   SCAN_END = 1 << 21,
   SCAN_SUCCESS = 1 << 22,
+  MOUSE_LEFT = 1 << 23,
+  MOUSE_RIGHT = 1 << 24,
+  MOUSE_CENTER = 1 << 25,
 }
 
 export type ButtonEventListener =

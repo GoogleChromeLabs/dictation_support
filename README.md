@@ -31,6 +31,7 @@ TODO: host latest release and link here
 | Philips SpeechMike Ambient PSM5000       |                 |
 | Nuance PowerMic III                      |                 |
 | Nuance PowerMic 4                        |                 |
+| OM RM-4010N                              |                 |
 
 ###  Supported platforms
 * Google Chrome on Windows, macOS, Linux and Chrome OS (Chromebooks)

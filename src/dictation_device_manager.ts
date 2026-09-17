@@ -19,6 +19,7 @@ import {DictationDevice} from './dictation_device';
 import {ButtonEventListener, ImplementationType} from './dictation_device_base';
 import {FootControlDevice} from './foot_control_device';
 import {PowerMic3Device} from './powermic_3_device';
+import {RM4010NDevice} from './rm_4010n_device';
 import {SpeechMikeGamepadDevice} from './speechmike_gamepad_device';
 import {MotionEventListener, SpeechMikeHidDevice,} from './speechmike_hid_device';
 
@@ -69,6 +70,10 @@ const DEVICE_FILTERS: Readonly<
         // PowerMic III
         Object.freeze(
             {vendorId: 0x0554, productId: 0x1001, usagePage: 1, usage: 0}),
+      ]),
+      [ImplementationType.RM_4010N]: Object.freeze([
+        // OM RM-4010N
+        Object.freeze({vendorId: 0x33a2, productId: 0x0297}),
       ]),
     });
 
@@ -214,6 +219,8 @@ export class DictationDeviceManager {
         return SpeechMikeGamepadDevice.create(hidDevice);
       case ImplementationType.FOOT_CONTROL:
         return FootControlDevice.create(hidDevice);
+      case ImplementationType.RM_4010N:
+        return RM4010NDevice.create(hidDevice);
       default:
         checkExhaustive(implType);
     }
@@ -243,7 +250,8 @@ export class DictationDeviceManager {
       device.addButtonEventListener(listener);
     }
 
-    if (device.implType === ImplementationType.SPEECHMIKE_HID) {
+    if (device.implType === ImplementationType.SPEECHMIKE_HID ||
+        device.implType === ImplementationType.RM_4010N) {
       for (const listener of this.motionEventListeners) {
         device.addMotionEventListener(listener);
       }

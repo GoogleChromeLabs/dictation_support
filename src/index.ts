@@ -19,5 +19,6 @@ export * from './dictation_device_base';
 export * from './dictation_device_manager';
 export * from './foot_control_device';
 export * from './powermic_3_device';
+export * from './rm_4010n_device';
 export * from './speechmike_gamepad_device';
 export * from './speechmike_hid_device';

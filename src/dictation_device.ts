@@ -17,8 +17,9 @@
 
 import {FootControlDevice} from './foot_control_device';
 import {PowerMic3Device} from './powermic_3_device';
+import {RM4010NDevice} from './rm_4010n_device';
 import {SpeechMikeGamepadDevice} from './speechmike_gamepad_device';
 import {SpeechMikeHidDevice} from './speechmike_hid_device';
 
 export type DictationDevice =|SpeechMikeHidDevice|SpeechMikeGamepadDevice|
-    PowerMic3Device|FootControlDevice;
+    PowerMic3Device|FootControlDevice|RM4010NDevice;
